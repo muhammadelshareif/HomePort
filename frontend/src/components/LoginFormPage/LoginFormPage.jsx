@@ -5,15 +5,11 @@ import { Navigate } from "react-router-dom";
 import "./LoginForm.css";
 
 function LoginFormPage() {
-  //   console.log("LoginFormPage component rendering");
-
   const dispatch = useDispatch();
   const sessionUser = useSelector((state) => state.session.user);
   const [credential, setCredential] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
-
-  //   console.log("Current session user:", sessionUser);
 
   if (sessionUser) {
     console.log("Redirecting to home page");
