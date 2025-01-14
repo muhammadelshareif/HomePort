@@ -1,0 +1,124 @@
+/* .hidden {
+  display: none;
+}
+
+.profile-dropdown {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 10px;
+  list-style: none;
+}
+
+ul {
+  list-style: none;
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+  margin: 0;
+}
+
+button {
+  cursor: pointer;
+} */
+
+ul {
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  margin: 0;
+  border-bottom: 1px solid #ccc;
+}
+
+.profile-dropdown {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 10px;
+  gap: 10px;
+  right: 20px;
+  top: 50px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.profile-dropdown li {
+  padding: 5px 10px;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* Style for the profile icon button */
+.profile-button {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 24px;
+  padding: 5px;
+  color: #000;
+}
+
+.profile-button:hover {
+  opacity: 0.7; /* Subtle hover effect instead of dark background */
+}
+
+/* Style for the logout button */
+.logout-button {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 14px; /* Smaller font size */
+  padding: 5px 10px;
+  color: #666;
+  width: 100%;
+  text-align: left;
+}
+
+.logout-button:hover {
+  color: #000;
+}
+
+/* Rest of your existing CSS */
+.profile-dropdown {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 10px;
+  gap: 10px;
+  right: 20px;
+  top: 50px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.profile-dropdown li {
+  padding: 5px 10px;
+}
+
+/* Add some spacing between nav items */
+.nav-links {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+/* Style the NavLinks */
+a {
+  text-decoration: none;
+  color: #333;
+}
+
+a:hover {
+  color: #666;
+}
