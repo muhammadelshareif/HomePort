@@ -69,7 +69,6 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
       tableName: "Users",
-      // Add this schema configuration
       ...(process.env.NODE_ENV === "production" && {
         schema: process.env.SCHEMA,
       }),

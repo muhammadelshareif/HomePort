@@ -11,7 +11,6 @@ const db = {};
 
 let sequelize;
 if (process.env.NODE_ENV === "production") {
-  // Production configuration
   sequelize = new Sequelize(process.env.DATABASE_URL, {
     dialectOptions: {
       ssl: {
@@ -24,10 +23,8 @@ if (process.env.NODE_ENV === "production") {
     },
   });
 } else if (config.use_env_variable) {
-  // Use environment variable specified in config
   sequelize = new Sequelize(process.env[config.use_env_variable], config);
 } else {
-  // Use specific database configuration
   sequelize = new Sequelize(
     config.database,
     config.username,
