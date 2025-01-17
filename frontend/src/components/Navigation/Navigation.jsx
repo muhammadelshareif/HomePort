@@ -1,5 +1,7 @@
 import { NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faAnchor } from "@fortawesome/free-solid-svg-icons";
 import ProfileButton from "./ProfileButton";
 import "./Navigation.css";
 
@@ -7,16 +9,18 @@ function Navigation({ isLoaded }) {
   const sessionUser = useSelector((state) => state.session.user);
 
   return (
-    <ul>
-      <li>
-        <NavLink to="/">Home</NavLink>
-      </li>
-      {isLoaded && (
-        <li>
-          <ProfileButton user={sessionUser} />
-        </li>
-      )}
-    </ul>
+    <nav className="navigation-container">
+      <div className="nav-content">
+        <NavLink to="/" className="logo-container">
+          <FontAwesomeIcon icon={faAnchor} className="logo-icon" />
+          <span className="logo-text">HomePort</span>
+        </NavLink>
+
+        <div className="nav-links">
+          {isLoaded && <ProfileButton user={sessionUser} />}
+        </div>
+      </div>
+    </nav>
   );
 }
 

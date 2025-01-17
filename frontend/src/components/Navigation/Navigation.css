@@ -1,4 +1,4 @@
-ul {
+/* ul {
   list-style: none;
   display: flex;
   justify-content: space-between;
@@ -30,67 +30,136 @@ ul {
   display: none !important;
 }
 
-/* Style for the profile icon button */
+.navigation-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 80px;
+    background-color: #FFFFFF;
+    border-bottom: 1px solid #E5E7EB;
+    z-index: 1000;
+}
+
+.nav-content {
+    max-width: 1280px;
+    margin: 0 auto;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+}
+
+.logo-icon {
+    color: #6366F1;
+    font-size: 24px;
+}
+
+.logo-text {
+    font-size: 24px;
+    font-weight: 700;
+    color: #312E81;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Profile Button Styling */
 .profile-button {
-  border: none;
   background: none;
+  border: 1px solid #e5e7eb;
+  border-radius: 21px;
+  padding: 5px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
   cursor: pointer;
+}
+
+.profile-icon {
   font-size: 24px;
-  padding: 5px;
-  color: #000;
+  color: #6366f1;
 }
 
-.profile-button:hover {
-  opacity: 0.7;
-}
-
-/* Style for the logout button */
-.logout-button {
-  border: none;
-  background: none;
-  cursor: pointer;
-  font-size: 14px;
-  padding: 5px 10px;
-  color: #666;
-  width: 100%;
-  text-align: left;
-}
-
-.logout-button:hover {
-  color: #000;
-}
-
+/* Dropdown Menu Styling */
 .profile-dropdown {
   position: absolute;
-  display: flex;
-  flex-direction: column;
-  background-color: white;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  padding: 10px;
-  gap: 10px;
+  top: 70px;
   right: 20px;
-  top: 50px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  min-width: 200px;
+  padding: 8px 0;
+  border: 1px solid #e5e7eb;
 }
 
 .profile-dropdown li {
-  padding: 5px 10px;
+  padding: 8px 16px;
+  font-size: 14px;
+  color: #1f2937;
 }
 
-/* Add some spacing between nav items */
+.profile-dropdown li:not(:last-child) {
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.profile-dropdown button {
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  padding: 8px 16px;
+  font-size: 14px;
+  color: #1f2937;
+  cursor: pointer;
+}
+
+/* Modal Button Styling */
+.modal-button {
+  width: 100%;
+  padding: 8px 16px;
+  background: none;
+  border: none;
+  font-size: 14px;
+  color: #1f2937;
+  cursor: pointer;
+  text-align: left;
+}
+
+.logout-button {
+  color: #ef4444;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* Navigation Links */
 .nav-links {
   display: flex;
   gap: 20px;
   align-items: center;
 }
 
-/* Style the NavLinks */
-a {
+.nav-link {
   text-decoration: none;
-  color: #333;
+  color: #1f2937;
+  font-weight: 500;
 }
 
-a:hover {
-  color: #666;
+@media (max-width: 768px) {
+  .nav-content {
+    padding: 0 16px;
+  }
+
+  .logo-text {
+    font-size: 20px;
+  }
 }
