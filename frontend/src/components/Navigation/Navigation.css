@@ -44,10 +44,9 @@
   margin-left: auto; /* This ensures it stays on the right */
 }
 
-/* Profile Button Styling */
 .profile-button {
   background: none;
-  border: 1px solid #e5e7eb;
+  border: 1px solid #dddddd;
   border-radius: 21px;
   padding: 5px 12px;
   display: flex;
@@ -56,9 +55,15 @@
   cursor: pointer;
 }
 
+/* Style for the menu bars icon specifically */
+.menu-icon {
+  color: #222222; /* Dark color to match Airbnb's design */
+  font-size: 16px; /* Slightly smaller than the profile icon */
+}
+
 .profile-icon {
   font-size: 20px;
-  color: #6366f1;
+  color: #717171; /* Airbnb's icon color */
 }
 
 /* Dropdown Menu Styling */

@@ -124,7 +124,7 @@ function ProfileButton({ user }) {
   return (
     <div className="profile-container">
       <button onClick={toggleMenu} className="profile-button">
-        <FontAwesomeIcon icon={faBars} />
+        <FontAwesomeIcon icon={faBars} className="menu-icon" />
         <FontAwesomeIcon icon={faUser} className="profile-icon" />
       </button>
       <ul
