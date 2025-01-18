@@ -1,30 +1,78 @@
+/* Login Form Modal Styling */
 form {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1rem;
+  width: 300px;
+  padding: 20px;
 }
 
 label {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  width: 100%;
 }
 
 input {
-  padding: 0.5rem;
-  width: 200px;
+  padding: 0.75rem;
+  width: 100%;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: border-color 0.3s ease;
+}
+
+input:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
 }
 
 button {
-  padding: 0.5rem 1rem;
-  background-color: #333;
+  padding: 0.75rem 1rem;
+  background-color: #6366f1;
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 8px;
   cursor: pointer;
+  width: 100%;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
 }
 
 button:hover {
-  background-color: #555;
+  background-color: #5254d4;
+}
+
+button:disabled {
+  background-color: #a5b4fc;
+  cursor: not-allowed;
+}
+
+.error {
+  color: #ef4444;
+  font-size: 0.875rem;
+  margin-top: -0.5rem;
+  width: 100%;
+  text-align: left;
+}
+
+.demo-login-button {
+  background-color: #e0e7ff;
+  color: #6366f1;
+  margin-top: 0.5rem;
+}
+
+.demo-login-button:hover {
+  background-color: #c7d3fe;
+}
+
+/* Modal Title Styling */
+h1 {
+  color: #312e81;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+  text-align: center;
 }

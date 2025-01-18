@@ -1,68 +1,61 @@
-.signup-form-container {
-  max-width: 500px;
-  margin: 0 auto;
+.signup-modal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 300px;
   padding: 20px;
+  font-family: "Poppins", sans-serif;
 }
 
-.signup-form-container h1 {
-  text-align: center;
-  color: #333;
-  margin-bottom: 20px;
-}
-
-.signup-form-container form {
-  background: #f9f9f9;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.form-group {
-  margin-bottom: 15px;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 5px;
-  color: #333;
-}
-
-.form-group input {
+.signup-modal form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
   width: 100%;
-  padding: 8px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 16px;
 }
 
-.form-group input:focus {
+.signup-modal label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 14px;
+}
+
+.signup-modal input {
+  padding: 12px;
+  border: 1px solid #dddddd;
+  border-radius: 8px;
+  width: 100%;
+  font-size: 14px;
+}
+
+.signup-modal input:focus {
   outline: none;
-  border-color: #0066cc;
-  box-shadow: 0 0 5px rgba(0, 102, 204, 0.2);
+  border-color: #6366f1;
+}
+
+.signup-modal button {
+  padding: 12px;
+  background-color: #6366f1;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.signup-modal button:hover {
+  background-color: #5254d4;
+}
+
+.signup-modal button:disabled {
+  background-color: #a5b4fc;
+  cursor: not-allowed;
 }
 
 .error {
-  color: #ff0000;
-  font-size: 14px;
-  margin-top: 5px;
-}
-
-button[type="submit"] {
-  width: 100%;
-  padding: 10px;
-  background-color: #0066cc;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-button[type="submit"]:hover {
-  background-color: #0052a3;
-}
-
-button[type="submit"]:active {
-  background-color: #004080;
+  color: #ef4444;
+  font-size: 12px;
+  margin-top: -0.5rem;
 }

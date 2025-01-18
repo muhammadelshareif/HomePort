@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import * as sessionActions from "../../store/session";
 import { useDispatch } from "react-redux";
 import { useModal } from "../../context/Modal";
@@ -10,6 +10,12 @@ function LoginFormModal() {
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
   const { closeModal } = useModal();
+  const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
+
+  // Check input validity
+  useEffect(() => {
+    setIsSubmitDisabled(credential.length < 4 || password.length < 6);
+  }, [credential, password]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -22,8 +28,19 @@ function LoginFormModal() {
       });
   };
 
+  // Demo user login handler
+  const handleDemoLogin = (e) => {
+    e.preventDefault();
+    return dispatch(
+      sessionActions.login({
+        credential: "Demo-lition",
+        password: "password",
+      })
+    ).then(closeModal);
+  };
+
   return (
-    <>
+    <div className="login-modal">
       <h1>Log In</h1>
       <form onSubmit={handleSubmit}>
         <label>
@@ -44,10 +61,15 @@ function LoginFormModal() {
             required
           />
         </label>
-        {errors.credential && <p>{errors.credential}</p>}
-        <button type="submit">Log In</button>
+        {errors.credential && <p className="error">{errors.credential}</p>}
+        <button type="submit" disabled={isSubmitDisabled}>
+          Log In
+        </button>
+        <button onClick={handleDemoLogin} className="demo-login-button">
+          Log in as Demo User
+        </button>
       </form>
-    </>
+    </div>
   );
 }
 
