@@ -1,3 +1,12 @@
+/* Global Styling and Accessibility */
+* {
+  -webkit-tap-highlight-color: transparent;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Navigation Container */
 .navigation-container {
   position: fixed;
   top: 0;
@@ -7,6 +16,8 @@
   background-color: #ffffff;
   border-bottom: 1px solid #e5e7eb;
   z-index: 1000;
+  width: 100%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 .nav-content {
@@ -17,13 +28,27 @@
   justify-content: space-between;
   align-items: center;
   padding: 0 20px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
+/* Logo Styling */
 .logo-container {
   display: flex;
   align-items: center;
   gap: 8px;
   text-decoration: none;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+}
+
+.logo-container:hover {
+  opacity: 0.8;
+}
+
+.logo-container:focus {
+  outline: 2px solid #6366f1;
+  outline-offset: 2px;
 }
 
 .logo-icon {
@@ -53,10 +78,18 @@
   font-size: 14px;
   margin-right: 16px;
   border-radius: 21px;
+  transition: all 0.3s ease;
+  cursor: pointer;
 }
 
 .create-spot-button:hover {
   background-color: #f7f7f7;
+  color: #6366f1;
+}
+
+.create-spot-button:focus {
+  outline: 2px solid #6366f1;
+  outline-offset: 2px;
 }
 
 /* Profile Section */
@@ -74,6 +107,17 @@
   align-items: center;
   gap: 8px;
   cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.profile-button:hover {
+  background-color: #f7f7f7;
+  border-color: #c0c0c0;
+}
+
+.profile-button:focus {
+  outline: 2px solid #6366f1;
+  outline-offset: 2px;
 }
 
 .menu-icon {
@@ -99,6 +143,7 @@
   border: 1px solid #dddddd;
   list-style-type: none;
   margin: 0;
+  z-index: 1100;
 }
 
 .profile-dropdown li {
@@ -106,10 +151,15 @@
   font-size: 14px;
   color: #222222;
   list-style: none;
+  transition: background-color 0.3s ease;
 }
 
 .profile-dropdown li:not(:last-child) {
   border-bottom: 1px solid #dddddd;
+}
+
+.profile-dropdown li:hover {
+  background-color: #f7f7f7;
 }
 
 .profile-dropdown button {
@@ -121,10 +171,16 @@
   font-size: 14px;
   color: #222222;
   cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
-/* Modal Button Styling */
-.modal-button {
+.profile-dropdown button:hover {
+  background-color: #f7f7f7;
+}
+
+/* Modal and Logout Button Styling */
+.modal-button,
+.logout-button {
   width: 100%;
   padding: 12px 16px;
   background: none;
@@ -133,18 +189,44 @@
   color: #222222;
   cursor: pointer;
   text-align: left;
+  transition: background-color 0.3s ease;
 }
 
-.logout-button {
-  color: #222222;
-  width: 100%;
+.modal-button:hover,
+.logout-button:hover {
+  background-color: #f7f7f7;
 }
 
+/* Hidden State */
 .hidden {
   display: none !important;
 }
 
-/* Media Query for desktop */
+/* Responsive Design Media Queries */
+@media screen and (max-width: 768px) {
+  .navigation-container {
+    height: 60px;
+  }
+
+  .nav-content {
+    padding: 0 16px;
+  }
+
+  .logo-text {
+    font-size: 20px;
+  }
+
+  .create-spot-button {
+    display: none;
+  }
+}
+
+@media screen and (min-width: 769px) and (max-width: 1023px) {
+  .nav-content {
+    padding: 0 40px;
+  }
+}
+
 @media screen and (min-width: 1024px) {
   .nav-content {
     padding: 0 80px;
