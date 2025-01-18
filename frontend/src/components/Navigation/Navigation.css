@@ -38,10 +38,31 @@
   font-family: "Poppins", sans-serif;
 }
 
+/* Navigation Links */
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Create Spot Button Styling */
+.create-spot-button {
+  text-decoration: none;
+  padding: 12px 16px;
+  color: #222222;
+  font-size: 14px;
+  margin-right: 16px;
+  border-radius: 21px;
+}
+
+.create-spot-button:hover {
+  background-color: #f7f7f7;
+}
+
 /* Profile Section */
 .profile-container {
   position: relative;
-  margin-left: auto; /* This ensures it stays on the right */
+  margin-left: auto;
 }
 
 .profile-button {
@@ -55,15 +76,14 @@
   cursor: pointer;
 }
 
-/* Style for the menu bars icon specifically */
 .menu-icon {
-  color: #222222; /* Dark color to match Airbnb's design */
-  font-size: 16px; /* Slightly smaller than the profile icon */
+  color: #222222;
+  font-size: 16px;
 }
 
 .profile-icon {
   font-size: 20px;
-  color: #717171; /* Airbnb's icon color */
+  color: #717171;
 }
 
 /* Dropdown Menu Styling */
@@ -77,15 +97,15 @@
   min-width: 240px;
   padding: 8px 0;
   border: 1px solid #dddddd;
-  list-style-type: none; /* Removes bullet points */
-  margin: 0; /* Reset margin */
+  list-style-type: none;
+  margin: 0;
 }
 
 .profile-dropdown li {
   padding: 12px 16px;
   font-size: 14px;
   color: #222222;
-  list-style: none; /* Ensures no bullets */
+  list-style: none;
 }
 
 .profile-dropdown li:not(:last-child) {
@@ -124,8 +144,9 @@
   display: none !important;
 }
 
-/* Navigation Links */
-.nav-links {
-  display: flex;
-  align-items: center;
+/* Media Query for desktop */
+@media screen and (min-width: 1024px) {
+  .nav-content {
+    padding: 0 80px;
+  }
 }
