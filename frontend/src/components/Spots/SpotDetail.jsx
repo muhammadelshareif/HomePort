@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchSpotDetails } from "../../../store/spots";
-import "./SpotsList.css"; // Using existing CSS file
+import "./SpotsList.css";
 
 function SpotDetails() {
   const { spotId } = useParams();
@@ -13,19 +13,12 @@ function SpotDetails() {
     dispatch(fetchSpotDetails(spotId));
   }, [dispatch, spotId]);
 
-  // If spot is not loaded yet
-  if (!spot) {
-    return <div>Loading...</div>;
-  }
+  if (!spot) return <div>Loading...</div>;
 
-  const handleReserveClick = () => {
-    alert("Feature coming soon");
-  };
-
-  // Determine primary (large) image and secondary (small) images
   const primaryImage =
     spot.SpotImages?.find((img) => img.preview)?.url ||
     spot.SpotImages?.[0]?.url;
+
   const secondaryImages =
     spot.SpotImages?.filter((img) => !img.preview).slice(0, 4) || [];
 
@@ -60,11 +53,14 @@ function SpotDetails() {
         </div>
 
         <div className="spot-callout-box">
-          <div className="spot-price-container">
+          <div className="spot-price">
             <span className="price">${spot.price}</span>
             <span className="night">night</span>
           </div>
-          <button className="reserve-button" onClick={handleReserveClick}>
+          <button
+            className="reserve-button"
+            onClick={() => alert("Feature coming soon")}
+          >
             Reserve
           </button>
         </div>

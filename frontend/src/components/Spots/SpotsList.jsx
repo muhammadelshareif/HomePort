@@ -25,7 +25,7 @@ function SpotsList() {
             key={spot.id}
             className="spot-tile"
             onClick={() => handleSpotClick(spot.id)}
-            title={spot.name} // This creates the tooltip
+            title={spot.name}
           >
             <div className="spot-image-container">
               <img
