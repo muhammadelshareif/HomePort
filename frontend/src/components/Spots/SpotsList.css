@@ -1,79 +1,113 @@
-.spots-container {
-  max-width: 1200px;
+.spot-details-container {
+  max-width: 1280px;
   margin: 0 auto;
-  padding: 20px;
-  font-family: "Poppins", sans-serif;
+  padding: 0 80px;
+  font-family: "Circular", -apple-system, BlinkMacSystemFont, Roboto,
+    Helvetica Neue, sans-serif;
 }
 
-.spots-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 24px;
-  padding: 20px 0;
-}
-
-.spot-tile {
-  cursor: pointer;
-  transition: transform 0.2s;
-  border-radius: 12px;
-  overflow: hidden;
-}
-
-.spot-tile:hover {
-  transform: scale(1.02);
-}
-
-.spot-image-container {
-  position: relative;
-  width: 100%;
-  padding-top: 100%; /* Creates a square aspect ratio */
-}
-
-.spot-image {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 12px;
-}
-
-.spot-info {
-  padding: 12px 4px;
-}
-
-.spot-location-rating {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+/* Spot Name and Location */
+.spot-details-container h1 {
+  font-size: 32px;
+  font-weight: 600;
   margin-bottom: 8px;
 }
 
 .spot-location {
-  font-weight: 600;
-  color: #222222;
-}
-
-.spot-rating {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.fa-star {
-  font-size: 12px;
-}
-
-.spot-price {
   font-size: 16px;
   color: #222222;
+  margin-bottom: 24px;
+}
+
+/* Image Layout */
+.spot-images-container {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  grid-template-rows: repeat(2, 1fr);
+  gap: 8px;
+  height: 460px;
+  margin-bottom: 48px;
+}
+
+.primary-image {
+  grid-row: span 2;
+}
+
+.primary-image img,
+.secondary-images img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 16px;
+}
+
+.secondary-images {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+/* Spot Information Layout */
+.spot-info-container {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 48px;
+}
+
+.spot-description {
+  width: 55%;
+}
+
+.hosted-by {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.spot-description p {
+  color: #717171;
+  line-height: 1.5;
+}
+
+/* Callout Box */
+.spot-callout-box {
+  width: 35%;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+}
+
+.spot-price-container {
+  display: flex;
+  align-items: baseline;
+  margin-bottom: 24px;
 }
 
 .price {
+  font-size: 22px;
   font-weight: 600;
 }
 
 .night {
-  margin-left: 4px;
+  margin-left: 6px;
+  color: #717171;
+}
+
+.reserve-button {
+  width: 100%;
+  padding: 14px;
+  background-color: #ff385c;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s;
+}
+
+.reserve-button:hover {
+  background-color: #d90b52;
+  transform: scale(1.01);
 }
