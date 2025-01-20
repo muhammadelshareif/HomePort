@@ -85,7 +85,17 @@ router.get("/current", requireAuth, async (req, res) => {
 
 // Get details of a Spot by spotId
 router.get("/:spotId", async (req, res) => {
-  const spot = await Spot.findByPk(req.params.spotId, {
+  const spotId = parseInt(req.params.spotId, 10); // Parse spotId as an integer
+
+  if (isNaN(spotId)) {
+    return res.status(400).json({
+      title: "Validation error",
+      message: "spotId must be a valid integer",
+      errors: { id: "spotId must be a valid integer" },
+    });
+  }
+
+  const spot = await Spot.findByPk(spotId, {
     include: [
       {
         model: SpotImage,
@@ -96,7 +106,13 @@ router.get("/:spotId", async (req, res) => {
         as: "Owner",
         attributes: ["id", "firstName", "lastName"],
       },
-      Review,
+      {
+        model: Review,
+        include: {
+          model: User,
+          attributes: ["firstName"],
+        },
+      },
     ],
   });
 
