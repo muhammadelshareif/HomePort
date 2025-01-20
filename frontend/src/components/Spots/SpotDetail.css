@@ -1,0 +1,188 @@
+/* Container for the entire spot detail page */
+.spot-details-container {
+  padding-top: 100px; /* Adjust this value based on your navbar height */
+  padding-left: 20px;
+  padding-right: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  font-family: "Circular", Arial, sans-serif;
+}
+
+/* Title and location */
+h1 {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+  color: #222;
+}
+
+.spot-location {
+  font-size: 1.1rem;
+  color: #717171;
+  margin-bottom: 30px;
+}
+
+/* Image section */
+.spot-images-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-bottom: 40px;
+}
+
+.primary-image img {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+}
+
+.secondary-images {
+  display: flex;
+  gap: 15px;
+  justify-content: space-between;
+}
+
+.secondary-images img {
+  flex: 1;
+  max-width: calc(25% - 15px); /* Adjust width for 4 images */
+  height: 120px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+/* Spot info section (description and callout box) */
+.spot-info-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.spot-description {
+  width: 65%;
+}
+
+.hosted-by {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #444;
+}
+
+.spot-description p {
+  font-size: 1rem;
+  color: #333;
+  line-height: 1.6;
+}
+
+/* Callout box for price and reserve button */
+.spot-callout-box {
+  width: 30%;
+  background-color: #f7f7f7;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.spot-price {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.price {
+  color: #000;
+}
+
+.night {
+  font-size: 1rem;
+  color: #717171;
+}
+
+.reserve-button {
+  width: 100%;
+  padding: 15px;
+  background-color: #ff385c;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.reserve-button:hover {
+  background-color: #d7264e;
+}
+
+/* Responsive design */
+@media screen and (max-width: 768px) {
+  .spot-info-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .spot-description,
+  .spot-callout-box {
+    width: 100%;
+  }
+
+  .secondary-images {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .secondary-images img {
+    max-width: 48%; /* Adjust size for smaller screens */
+    height: 100px;
+    margin-bottom: 10px;
+  }
+}
+/* Review Summary */
+.review-summary {
+  font-size: 1.2rem;
+  color: #444;
+  margin: 20px 0;
+}
+
+.review-summary .fa-star {
+  color: #ffd700;
+  margin-right: 5px;
+}
+
+/* Review List */
+.review-list {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.review-item {
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.review-author {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.review-date {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 10px;
+}
+
+.review-text {
+  font-size: 1rem;
+  color: #333;
+}
+
+/* No Reviews Message */
+.no-reviews-message {
+  font-size: 1.2rem;
+  color: #888;
+  text-align: center;
+  margin-top: 20px;
+}
