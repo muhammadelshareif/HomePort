@@ -159,18 +159,23 @@ router.get("/:spotId", async (req, res) => {
 
 // Create a new Spot
 router.post("/", requireAuth, async (req, res) => {
-  const { address, city, state, country, lat, lng, name, description, price } =
-    req.body;
+  const {
+    address,
+    city,
+    state,
+    country,
+    lat = 0,
+    lng = 0,
+    name,
+    description,
+    price,
+  } = req.body;
   const errors = {};
 
   if (!address) errors.address = "Street address is required";
   if (!city) errors.city = "City is required";
   if (!state) errors.state = "State is required";
   if (!country) errors.country = "Country is required";
-  if (lat === undefined || lat < -90 || lat > 90)
-    errors.lat = "Latitude must be between -90 and 90";
-  if (lng === undefined || lng < -180 || lng > 180)
-    errors.lng = "Longitude must be between -180 and 180";
   if (!name || name.length > 50)
     errors.name = "Name must be less than 50 characters";
   if (!description) errors.description = "Description is required";
