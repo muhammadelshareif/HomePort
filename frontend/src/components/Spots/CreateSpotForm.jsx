@@ -6,6 +6,7 @@ import "./CreateSpotForm.css";
 function CreateSpotForm() {
   const navigate = useNavigate();
   const sessionUser = useSelector((state) => state.session.user);
+  const [isLoading, setIsLoading] = useState(true);
   const [formData, setFormData] = useState({
     country: "",
     address: "",
@@ -25,8 +26,16 @@ function CreateSpotForm() {
   const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
-    if (!sessionUser) navigate("/login");
+    if (!sessionUser) {
+      navigate("/login");
+      return;
+    }
+    setIsLoading(false);
   }, [sessionUser, navigate]);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   const validateForm = () => {
     const newErrors = {};
@@ -60,12 +69,32 @@ function CreateSpotForm() {
     }
 
     try {
+      const csrfToken = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("XSRF-TOKEN"))
+        ?.split("=")[1];
+
+      if (!csrfToken) {
+        throw new Error("CSRF token not found");
+      }
+
       const response = await fetch("/api/spots", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "XSRF-TOKEN": decodeURIComponent(csrfToken),
         },
-        body: JSON.stringify(formData),
+        credentials: "include",
+        body: JSON.stringify({
+          country: formData.country,
+          address: formData.address,
+          city: formData.city,
+          state: formData.state,
+          name: formData.name,
+          description: formData.description,
+          price: Number(formData.price),
+          previewImage: formData.previewImage,
+        }),
       });
 
       if (response.ok) {
@@ -73,9 +102,10 @@ function CreateSpotForm() {
         navigate(`/spots/${newSpot.id}`);
       } else {
         const data = await response.json();
-        setErrors(data.errors);
+        setErrors(data.errors || { submit: "Failed to create spot" });
       }
     } catch (error) {
+      console.error("Error submitting form:", error);
       setErrors({ submit: "An error occurred. Please try again." });
     }
   };
@@ -223,6 +253,8 @@ function CreateSpotForm() {
               value={formData.price}
               onChange={handleInputChange}
               placeholder="Price per night (USD)"
+              min="0"
+              step="0.01"
             />
             {submitted && errors.price && (
               <span className="error">{errors.price}</span>
@@ -288,6 +320,10 @@ function CreateSpotForm() {
             />
           </div>
         </section>
+
+        {errors.submit && (
+          <div className="error submit-error">{errors.submit}</div>
+        )}
 
         <button type="submit" className="submit-button">
           Create Spot
