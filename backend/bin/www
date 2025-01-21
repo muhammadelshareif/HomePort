@@ -32,8 +32,8 @@ require("dotenv").config();
 const app = require("../app");
 const db = require("../db/models");
 
-// Use environment variable PORT or default to 3000
-const port = process.env.PORT || 3000;
+// Use environment variable PORT or default to 8000 (changed from 3000)
+const port = process.env.PORT || 8000;
 
 // Check the database connection before starting the app
 db.sequelize
@@ -42,14 +42,19 @@ db.sequelize
     console.log("Database connection success! Sequelize is ready to use...");
 
     // Start listening for connections
-    const server = app.listen(port, () => {
-      console.log(`Listening on port ${port}...`);
-    });
-
-    // Handle errors after initial connection
-    server.on("error", (error) => {
-      console.error("Server error:", error);
-    });
+    const server = app
+      .listen(port, () => {
+        console.log(`Server is listening on port ${port}`);
+      })
+      .on("error", (error) => {
+        if (error.code === "EADDRINUSE") {
+          console.log("Port is already in use. Trying another port...");
+          // Try another port if the current one is in use
+          server.listen(0); // This will use any available port
+        } else {
+          console.error("Server error:", error);
+        }
+      });
   })
   .catch((err) => {
     console.log("Database connection failure.");
