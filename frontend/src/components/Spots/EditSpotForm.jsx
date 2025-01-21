@@ -1,11 +1,15 @@
-import { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import "./CreateSpotForm.css";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
+import { fetchSpotDetails, updateSpot } from "../../store/spots";
+import "./SpotForm.css";
 
-function CreateSpotForm() {
+function EditSpotForm() {
+  const { spotId } = useParams();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const sessionUser = useSelector((state) => state.session.user);
+  const spot = useSelector((state) => state.spots.currentSpot);
+
   const [formData, setFormData] = useState({
     country: "",
     address: "",
@@ -22,11 +26,32 @@ function CreateSpotForm() {
   });
 
   const [errors, setErrors] = useState({});
-  const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Fetch spot details when component mounts
   useEffect(() => {
-    if (!sessionUser) navigate("/login");
-  }, [sessionUser, navigate]);
+    dispatch(fetchSpotDetails(spotId));
+  }, [dispatch, spotId]);
+
+  // Populate form when spot data is available
+  useEffect(() => {
+    if (spot) {
+      setFormData({
+        country: spot.country || "",
+        address: spot.address || "",
+        city: spot.city || "",
+        state: spot.state || "",
+        description: spot.description || "",
+        name: spot.name || "",
+        price: spot.price || "",
+        previewImage: spot.SpotImages?.find((img) => img.preview)?.url || "",
+        image1: spot.SpotImages?.[1]?.url || "",
+        image2: spot.SpotImages?.[2]?.url || "",
+        image3: spot.SpotImages?.[3]?.url || "",
+        image4: spot.SpotImages?.[4]?.url || "",
+      });
+    }
+  }, [spot]);
 
   const validateForm = () => {
     const newErrors = {};
@@ -35,49 +60,16 @@ function CreateSpotForm() {
     if (!formData.address) newErrors.address = "Street address is required";
     if (!formData.city) newErrors.city = "City is required";
     if (!formData.state) newErrors.state = "State is required";
-    if (!formData.description || formData.description.length < 30) {
+    if (formData.description.length < 30) {
       newErrors.description = "Description needs 30 or more characters";
     }
     if (!formData.name) newErrors.name = "Name is required";
-    if (!formData.price || formData.price <= 0) {
-      newErrors.price = "Price per night is required";
-    }
-    if (!formData.previewImage) {
+    if (!formData.price) newErrors.price = "Price is required";
+    if (!formData.previewImage)
       newErrors.previewImage = "Preview image is required";
-    }
 
-    return newErrors;
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setSubmitted(true);
-
-    const validationErrors = validateForm();
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      return;
-    }
-
-    try {
-      const response = await fetch("/api/spots", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (response.ok) {
-        const newSpot = await response.json();
-        navigate(`/spots/${newSpot.id}`);
-      } else {
-        const data = await response.json();
-        setErrors(data.errors);
-      }
-    } catch (error) {
-      setErrors({ submit: "An error occurred. Please try again." });
-    }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleInputChange = (e) => {
@@ -88,84 +80,93 @@ function CreateSpotForm() {
     }));
   };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    if (!validateForm()) {
+      setIsSubmitting(false);
+      return;
+    }
+
+    try {
+      const updatedSpot = await dispatch(
+        updateSpot({
+          id: spotId,
+          ...formData,
+        })
+      );
+      navigate(`/spots/${updatedSpot.id}`);
+    } catch (error) {
+      setErrors(error.errors || { form: "Failed to update spot" });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  if (!spot) return <div>Loading...</div>;
+
   return (
     <div className="spot-form-container">
-      <h1>Create a New Spot</h1>
-      <form onSubmit={handleSubmit}>
-        {/* Section 1: Location */}
+      <h1>Update your Spot</h1>
+
+      <form onSubmit={handleSubmit} className="spot-form">
         <section>
           <h2>Wheres your place located?</h2>
           <p>
-            Guests will only get your exact address once they booked a
+            Guests will only get your exact address once they book a
             reservation.
           </p>
 
           <div className="form-group">
-            <label>
-              Country
-              <input
-                type="text"
-                name="country"
-                value={formData.country}
-                onChange={handleInputChange}
-                placeholder="Country"
-              />
-              {submitted && errors.country && (
-                <span className="error">{errors.country}</span>
-              )}
-            </label>
+            <label>Country</label>
+            <input
+              type="text"
+              name="country"
+              value={formData.country}
+              onChange={handleInputChange}
+              placeholder="Country"
+            />
+            {errors.country && <span className="error">{errors.country}</span>}
           </div>
 
           <div className="form-group">
-            <label>
-              Street Address
-              <input
-                type="text"
-                name="address"
-                value={formData.address}
-                onChange={handleInputChange}
-                placeholder="Address"
-              />
-              {submitted && errors.address && (
-                <span className="error">{errors.address}</span>
-              )}
-            </label>
+            <label>Street Address</label>
+            <input
+              type="text"
+              name="address"
+              value={formData.address}
+              onChange={handleInputChange}
+              placeholder="Address"
+            />
+            {errors.address && <span className="error">{errors.address}</span>}
           </div>
 
           <div className="form-group">
-            <label>
-              City
-              <input
-                type="text"
-                name="city"
-                value={formData.city}
-                onChange={handleInputChange}
-                placeholder="City"
-              />
-              {submitted && errors.city && (
-                <span className="error">{errors.city}</span>
-              )}
-            </label>
+            <label>City</label>
+            <input
+              type="text"
+              name="city"
+              value={formData.city}
+              onChange={handleInputChange}
+              placeholder="City"
+            />
+            {errors.city && <span className="error">{errors.city}</span>}
           </div>
 
           <div className="form-group">
-            <label>
-              State
-              <input
-                type="text"
-                name="state"
-                value={formData.state}
-                onChange={handleInputChange}
-                placeholder="State"
-              />
-              {submitted && errors.state && (
-                <span className="error">{errors.state}</span>
-              )}
-            </label>
+            <label>State</label>
+            <input
+              type="text"
+              name="state"
+              value={formData.state}
+              onChange={handleInputChange}
+              placeholder="State"
+            />
+            {errors.state && <span className="error">{errors.state}</span>}
           </div>
         </section>
 
-        {/* Section 2: Description */}
         <section>
           <h2>Describe your place to guests</h2>
           <p>
@@ -179,14 +180,14 @@ function CreateSpotForm() {
               value={formData.description}
               onChange={handleInputChange}
               placeholder="Please write at least 30 characters"
+              rows="5"
             />
-            {submitted && errors.description && (
+            {errors.description && (
               <span className="error">{errors.description}</span>
             )}
           </div>
         </section>
 
-        {/* Section 3: Title */}
         <section>
           <h2>Create a title for your spot</h2>
           <p>
@@ -202,13 +203,10 @@ function CreateSpotForm() {
               onChange={handleInputChange}
               placeholder="Name of your spot"
             />
-            {submitted && errors.name && (
-              <span className="error">{errors.name}</span>
-            )}
+            {errors.name && <span className="error">{errors.name}</span>}
           </div>
         </section>
 
-        {/* Section 4: Price */}
         <section>
           <h2>Set a base price for your spot</h2>
           <p>
@@ -224,13 +222,10 @@ function CreateSpotForm() {
               onChange={handleInputChange}
               placeholder="Price per night (USD)"
             />
-            {submitted && errors.price && (
-              <span className="error">{errors.price}</span>
-            )}
+            {errors.price && <span className="error">{errors.price}</span>}
           </div>
         </section>
 
-        {/* Section 5: Photos */}
         <section>
           <h2>Liven up your spot with photos</h2>
           <p>Submit a link to at least one photo to publish your spot.</p>
@@ -243,7 +238,7 @@ function CreateSpotForm() {
               onChange={handleInputChange}
               placeholder="Preview Image URL"
             />
-            {submitted && errors.previewImage && (
+            {errors.previewImage && (
               <span className="error">{errors.previewImage}</span>
             )}
           </div>
@@ -289,12 +284,12 @@ function CreateSpotForm() {
           </div>
         </section>
 
-        <button type="submit" className="submit-button">
-          Create Spot
+        <button type="submit" disabled={isSubmitting} className="submit-button">
+          Update your Spot
         </button>
       </form>
     </div>
   );
 }
 
-export default CreateSpotForm;
+export default EditSpotForm;

@@ -7,12 +7,15 @@ import configureStore from "./store/store.js";
 import { restoreCSRF, csrfFetch } from "./store/csrf";
 import * as sessionActions from "./store/session";
 import { Modal, ModalProvider } from "./context/Modal";
+import "./index.css";
 
 const store = configureStore();
 
-if (import.meta.env.MODE !== "production") {
-  restoreCSRF();
+// Fetch CSRF token on app initialization
+restoreCSRF(); // Always restore CSRF, even in production
 
+// Expose store and session actions in non-production environments for debugging
+if (import.meta.env.MODE !== "production") {
   window.csrfFetch = csrfFetch;
   window.store = store;
   window.sessionActions = sessionActions;

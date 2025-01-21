@@ -1,0 +1,172 @@
+/* General container styling for the Spot Management page */
+.spot-management-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.spot-management-container h1 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 2rem;
+  color: #333;
+}
+
+/* Styling for the list of spots */
+.spot-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+/* Individual spot tile styling */
+.spot-tile {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  width: 280px;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.spot-tile:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Spot image styling */
+.spot-image {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+/* Spot details section */
+.spot-details {
+  padding: 10px 15px;
+  text-align: left;
+}
+
+.spot-details h2 {
+  font-size: 1.2rem;
+  margin: 0 0 8px;
+  color: #444;
+  font-weight: bold;
+}
+
+.spot-details p {
+  margin: 5px 0;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+/* Buttons section */
+.spot-actions {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  border-top: 1px solid #ddd;
+  background-color: #f9f9f9;
+}
+
+.spot-actions .update-button,
+.spot-actions .delete-button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.spot-actions .update-button {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.spot-actions .update-button:hover {
+  background-color: #0056b3;
+}
+
+.spot-actions .delete-button {
+  background-color: #dc3545;
+  color: #fff;
+}
+
+.spot-actions .delete-button:hover {
+  background-color: #a71d2a;
+}
+
+/* Create new spot button styling */
+.create-spot-button {
+  display: block;
+  margin: 20px auto 0;
+  padding: 10px 20px;
+  background-color: #28a745;
+  color: #fff;
+  font-size: 1rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.create-spot-button:hover {
+  background-color: #218838;
+}
+
+/* Modal Styles */
+#modal-background {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 1000;
+}
+
+#modal-content {
+  position: absolute;
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  z-index: 1001;
+  max-width: 400px;
+  margin: 100px auto;
+  text-align: center;
+}
+
+#modal-content button {
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#modal-content button:hover {
+  background-color: #a71d2a;
+}
+
+/* Responsive styling */
+@media (max-width: 768px) {
+  .spot-list {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .spot-tile {
+    width: 100%;
+  }
+
+  .create-spot-button {
+    width: 100%;
+    padding: 15px;
+  }
+}

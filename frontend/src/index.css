@@ -1,1 +1,134 @@
-/* TODO: Add sitewide styles */
+/* index.css */
+
+/* Resetting default margin and padding for all elements */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Body setup */
+body {
+  font-family: "Circular", Arial, sans-serif; /* Global font */
+  background-color: #f7f7f7; /* Light background */
+  color: #333; /* Default text color */
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+}
+
+/* Link reset */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Setting up a universal container to center content */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Basic font sizes for headers */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Circular", Arial, sans-serif;
+  font-weight: bold;
+  color: #222; /* Darker color for headings */
+}
+
+h1 {
+  font-size: 2.5rem;
+}
+
+h2 {
+  font-size: 2rem;
+}
+
+h3 {
+  font-size: 1.75rem;
+}
+
+/* Form elements styling */
+input,
+textarea,
+select,
+button {
+  font-family: "Circular", Arial, sans-serif;
+  font-size: 1rem;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  outline: none;
+  margin-bottom: 15px;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: #ff385c; /* Highlight with color */
+  box-shadow: 0 0 5px rgba(255, 56, 92, 0.5);
+}
+
+/* Error message styling */
+.error {
+  color: red;
+  font-size: 0.9rem;
+  margin-top: 5px;
+}
+
+/* Buttons */
+button {
+  cursor: pointer;
+  background-color: #ff385c;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #d7264e;
+}
+
+/* Adding some padding and margin to the page */
+main {
+  padding: 50px 0;
+}
+
+/* Make sure that the buttons and forms are responsive */
+@media screen and (max-width: 768px) {
+  .container {
+    padding: 0 10px;
+  }
+
+  h1 {
+    font-size: 2rem;
+  }
+
+  h2 {
+    font-size: 1.75rem;
+  }
+
+  h3 {
+    font-size: 1.5rem;
+  }
+
+  input,
+  textarea,
+  select,
+  button {
+    font-size: 1rem;
+    padding: 8px;
+  }
+}

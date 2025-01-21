@@ -5,7 +5,9 @@ import Navigation from "./components/Navigation/Navigation.jsx";
 import * as sessionActions from "./store/session";
 import SpotsList from "./components/Spots/SpotsList";
 import SpotDetail from "./components/Spots/SpotDetail";
-import CreateSpotForm from "./components/Spots/CreateSpotForm"; // Import the new spot form component
+import CreateSpotForm from "./components/Spots/CreateSpotForm";
+import EditSpotForm from "./components/Spots/EditSpotForm";
+import ManageSpots from "./components/Spots/ManageSpots";
 
 function Layout() {
   const dispatch = useDispatch();
@@ -34,12 +36,20 @@ const router = createBrowserRouter([
         element: <SpotsList />,
       },
       {
+        path: "/spots/new", // Route for creating a new spot
+        element: <CreateSpotForm />,
+      },
+      {
+        path: "/spots/manage", // New route for managing spots
+        element: <ManageSpots />,
+      },
+      {
         path: "/spots/:spotId", // Spot detail page route
         element: <SpotDetail />,
       },
       {
-        path: "/spots/new", // New route for creating a spot
-        element: <CreateSpotForm />, // Component for the "Create a New Spot" form
+        path: "/spots/:spotId/edit", // Route for editing a spot
+        element: <EditSpotForm />,
       },
     ],
   },

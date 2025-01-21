@@ -1,6 +1,5 @@
-/* Container for the entire spot detail page */
 .spot-details-container {
-  padding-top: 100px; /* Adjust this value based on your navbar height */
+  padding-top: 100px;
   padding-left: 20px;
   padding-right: 20px;
   max-width: 1200px;
@@ -8,7 +7,6 @@
   font-family: "Circular", Arial, sans-serif;
 }
 
-/* Title and location */
 h1 {
   font-size: 2.5rem;
   margin-bottom: 10px;
@@ -21,7 +19,6 @@ h1 {
   margin-bottom: 30px;
 }
 
-/* Image section */
 .spot-images-container {
   display: flex;
   flex-direction: column;
@@ -43,13 +40,12 @@ h1 {
 
 .secondary-images img {
   flex: 1;
-  max-width: calc(25% - 15px); /* Adjust width for 4 images */
+  max-width: calc(25% - 15px);
   height: 120px;
   object-fit: cover;
   border-radius: 8px;
 }
 
-/* Spot info section (description and callout box) */
 .spot-info-container {
   display: flex;
   justify-content: space-between;
@@ -73,7 +69,6 @@ h1 {
   line-height: 1.6;
 }
 
-/* Callout box for price and reserve button */
 .spot-callout-box {
   width: 30%;
   background-color: #f7f7f7;
@@ -113,30 +108,6 @@ h1 {
   background-color: #d7264e;
 }
 
-/* Responsive design */
-@media screen and (max-width: 768px) {
-  .spot-info-container {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .spot-description,
-  .spot-callout-box {
-    width: 100%;
-  }
-
-  .secondary-images {
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-
-  .secondary-images img {
-    max-width: 48%; /* Adjust size for smaller screens */
-    height: 100px;
-    margin-bottom: 10px;
-  }
-}
-/* Review Summary */
 .review-summary {
   font-size: 1.2rem;
   color: #444;
@@ -148,7 +119,23 @@ h1 {
   margin-right: 5px;
 }
 
-/* Review List */
+.reviews-section {
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+}
+
+.reviews-section h2 {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.reviews-section h2 .fa-star {
+  margin-right: 10px;
+  color: #ffd700;
+}
+
 .review-list {
   margin-top: 20px;
   display: flex;
@@ -157,10 +144,28 @@ h1 {
 }
 
 .review-item {
+  display: flex;
+  flex-direction: column;
   padding: 15px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  background-color: #f9f9f9;
+  border: none;
+  border-bottom: 1px solid #e0e0e0;
+  background-color: transparent;
+}
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.review-rating {
+  display: flex;
+  align-items: center;
+}
+
+.review-rating .fa-star {
+  color: #ffd700;
+  margin-left: 5px;
 }
 
 .review-author {
@@ -179,10 +184,67 @@ h1 {
   color: #333;
 }
 
-/* No Reviews Message */
 .no-reviews-message {
   font-size: 1.2rem;
   color: #888;
   text-align: center;
   margin-top: 20px;
+}
+
+.post-review-button {
+  align-self: flex-start;
+  margin-bottom: 20px;
+  background-color: #ff385c;
+  color: white;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.post-review-button:hover {
+  background-color: #e31c5f;
+}
+
+@media screen and (max-width: 768px) {
+  .spot-info-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .spot-description,
+  .spot-callout-box {
+    width: 100%;
+  }
+
+  .secondary-images {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .secondary-images img {
+    max-width: 48%;
+    height: 100px;
+    margin-bottom: 10px;
+  }
+}
+
+.review-actions {
+  margin-top: 10px;
+}
+
+.review-actions button {
+  padding: 8px 16px;
+  background-color: #ff5a5f;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.review-actions button:hover {
+  background-color: #ff385c;
 }

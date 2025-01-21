@@ -2,31 +2,27 @@
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
-  margin-top: 80px; /* Push container down */
 }
 
 .spot-form-container h1 {
   font-size: 24px;
   margin-bottom: 20px;
-  margin-top: 50px; /* Add space above title */
-  padding-top: 20px; /* Additional padding for title */
 }
 
-form section {
+.spot-form section {
   margin-bottom: 30px;
+  border-bottom: 1px solid #ddd;
   padding-bottom: 20px;
-  border-bottom: 1px solid #cccccc;
 }
 
-section h2 {
+.spot-form section h2 {
   font-size: 20px;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 
-section p {
+.spot-form section p {
   color: #717171;
-  margin-bottom: 20px;
-  font-size: 14px;
+  margin-bottom: 15px;
 }
 
 .form-group {
@@ -36,13 +32,14 @@ section p {
 .form-group label {
   display: block;
   margin-bottom: 5px;
+  font-weight: 600;
 }
 
 .form-group input,
 .form-group textarea {
   width: 100%;
   padding: 10px;
-  border: 1px solid #cccccc;
+  border: 1px solid #ddd;
   border-radius: 4px;
   font-size: 16px;
 }
@@ -54,7 +51,7 @@ section p {
 
 .error {
   color: #ff385c;
-  font-size: 12px;
+  font-size: 14px;
   margin-top: 5px;
   display: block;
 }
@@ -68,15 +65,25 @@ section p {
   border-radius: 8px;
   font-size: 16px;
   cursor: pointer;
-  margin-top: 20px;
+  transition: background-color 0.3s ease;
 }
 
 .submit-button:hover {
   background-color: #e31c5f;
 }
 
+.submit-button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
 @media (max-width: 768px) {
   .spot-form-container {
     padding: 10px;
+  }
+
+  .form-group input,
+  .form-group textarea {
+    font-size: 14px;
   }
 }
