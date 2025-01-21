@@ -21,23 +21,24 @@ app.use(morgan("dev"));
 app.use(cookieParser());
 app.use(express.json());
 
-// CORS Middleware
+// CORS Middleware - Ensure proper access for React frontend
 const corsOptions = {
   origin: isProduction
-    ? "https://mod5-frontend-project.onrender.com" // Replace with your deployed frontend URL
-    : "http://localhost:3000", // Localhost for development
-  methods: ["GET", "POST", "PUT", "DELETE"], // Allow necessary methods
-  allowedHeaders: ["Content-Type", "Authorization"], // Allow specific headers
-  credentials: true, // Allow credentials (cookies, headers, etc.)
+    ? [
+        "https://mod5-frontend-project.onrender.com",
+        "http://localhost:3000",
+        "http://localhost:5173",
+      ]
+    : ["http://localhost:3000", "http://localhost:5173"], // Include localhost 5173 for dev
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization", "x-csrf-token"], // Ensure lowercase x-csrf-token
+  exposedHeaders: ["XSRF-Token"],
+  credentials: true,
 };
 
 app.use(cors(corsOptions));
 
-// Security Middleware (only for production)
-if (!isProduction) {
-  // Enable cors only in development
-  app.use(cors());
-}
+app.use(cors(corsOptions));
 
 // Helmet to secure your app with HTTP headers
 app.use(
@@ -46,18 +47,36 @@ app.use(
   })
 );
 
-// Set the _csrf token and create req.csrfToken method
+// Set the CSRF token and create req.csrfToken method
 app.use(
   csurf({
     cookie: {
-      secure: isProduction, // Cookie is only sent over HTTPS in production
-      sameSite: isProduction && "Lax", // Only send the cookie in a first-party context
-      httpOnly: true, // Ensure cookies are not accessible via JavaScript
+      secure: isProduction, // Use secure cookies in production
+      sameSite: isProduction ? "Lax" : "Strict",
+      httpOnly: true, // Prevent client-side JavaScript from accessing this cookie
     },
   })
 );
 
-app.use(routes); // Use routes from the routes folder
+// Route to restore CSRF token
+app.get("/api/csrf/restore", (req, res) => {
+  res.cookie("XSRF-TOKEN", req.csrfToken(), {
+    httpOnly: false, // Allow frontend to access this cookie
+    secure: isProduction, // Use secure cookies in production
+    sameSite: isProduction ? "Lax" : "Strict",
+  });
+  res.status(200).json({});
+});
+
+// Debugging middleware to check CSRF tokens
+app.use((req, res, next) => {
+  console.log("CSRF Token in Request Header:", req.headers["x-csrf-token"]);
+  console.log("CSRF Token from req.csrfToken():", req.csrfToken());
+  next();
+});
+
+// Routes
+app.use(routes);
 
 // Catch unhandled requests and forward to error handler
 app.use((_req, _res, next) => {
