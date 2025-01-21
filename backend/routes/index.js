@@ -1,43 +1,43 @@
-// backend/routes/index.js
 const express = require("express");
 const router = express.Router();
-const apiRouter = require("./api");
+const spotsRouter = require("./api/spots"); // Ensure this points to the correct file
 
-router.use("/api", apiRouter);
+// Use /api/spots route for all spot-related endpoints
+router.use("/api/spots", spotsRouter);
 
-// Static routes
-// Serve React build files in production
+// Static routes for serving frontend assets in production
 if (process.env.NODE_ENV === "production") {
   const path = require("path");
-  // Serve the frontend's index.html file at the root route
+
+  // Serve the React frontend's index.html file at the root route
   router.get("/", (req, res) => {
-    res.cookie("XSRF-TOKEN", req.csrfToken());
+    res.cookie("XSRF-TOKEN", req.csrfToken()); // Set CSRF token cookie
     res.sendFile(
       path.resolve(__dirname, "../../frontend", "dist", "index.html")
     );
   });
 
-  // Serve the static assets in the frontend's build folder
-  router.use(express.static(path.resolve("../frontend/dist")));
+  // Serve the static assets from the React frontend's build folder
+  router.use(express.static(path.resolve("../../frontend/dist"))); // Correct the path to your build folder
 
-  // Serve the frontend's index.html file at all other routes NOT starting with /api
+  // Redirect all other routes (except those starting with /api) to the index.html of the React app
   router.get(/^(?!\/?api).*/, (req, res) => {
-    res.cookie("XSRF-TOKEN", req.csrfToken());
+    res.cookie("XSRF-TOKEN", req.csrfToken()); // Set CSRF token cookie
     res.sendFile(
       path.resolve(__dirname, "../../frontend", "dist", "index.html")
     );
   });
 }
 
-// Add a XSRF-TOKEN cookie in development
+// Handle CSRF token restoration in development
 if (process.env.NODE_ENV !== "production") {
   router.get("/api/csrf/restore", (req, res) => {
-    const csrfToken = req.csrfToken();
-    res.cookie("XSRF-TOKEN", csrfToken);
+    const csrfToken = req.csrfToken(); // Get the CSRF token
+    res.cookie("XSRF-TOKEN", csrfToken); // Set CSRF token cookie
     res.status(200).json({
-      "XSRF-Token": csrfToken,
+      "XSRF-Token": csrfToken, // Return the CSRF token in the response
     });
   });
 }
 
-module.exports = router;
+module.exports = router; // Export the routes to be used in app.js
