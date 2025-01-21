@@ -2,8 +2,11 @@ const config = require("./index");
 
 module.exports = {
   development: {
-    storage: config.dbFile,
-    dialect: "sqlite",
+    username: "muhammad",
+    password: null,
+    database: "mod5_project_db",
+    host: "127.0.0.1",
+    dialect: "postgres",
     seederStorage: "sequelize",
     logQueryParameters: true,
     typeValidation: true,
@@ -27,6 +30,6 @@ module.exports = {
       acquire: 30000,
       idle: 10000,
     },
-    logging: false, // Disable logging in production
+    logging: false,
   },
 };
