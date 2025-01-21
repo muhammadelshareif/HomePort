@@ -2,9 +2,10 @@ import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchSpotDetails } from "../../store/spots";
+import { deleteReview } from "../../store/reviews"; // Added import for deleteReview
 import OpenModalButton from "../../components/OpenModalButton";
 import CreateReviewModal from "../Reviews/CreateReviewModal";
-import DeleteReviewModal from "../Reviews/DeleteReviewModal"; // Add this import
+import DeleteReviewModal from "../Reviews/DeleteReviewModal";
 import "./SpotDetail.css";
 
 function SpotDetails() {
@@ -17,30 +18,22 @@ function SpotDetails() {
     dispatch(fetchSpotDetails(spotId));
   }, [dispatch, spotId]);
 
-  const handleDeleteReview = async (reviewId) => {
-    try {
-      const response = await fetch(`/api/reviews/${reviewId}`, {
-        method: "DELETE",
-      });
-
-      if (response.ok) {
-        dispatch(fetchSpotDetails(spotId));
-      }
-    } catch (error) {
-      console.error("Failed to delete review:", error);
-    }
+  const handleDeleteReview = (reviewId) => {
+    dispatch(deleteReview(reviewId)).then(() =>
+      dispatch(fetchSpotDetails(spotId))
+    ); // Refetch spot details after deletion
   };
 
   if (!spot) return <div>Loading...</div>;
 
-  const primaryImage =
-    spot.SpotImages?.find((img) => img.preview)?.url ||
-    spot.SpotImages?.[0]?.url;
+  const primaryImage = spot.SpotImages?.find((img) => img.preview)?.url;
+  const secondaryImages = spot.SpotImages?.filter((img) => !img.preview).slice(
+    0,
+    4
+  );
 
-  const secondaryImages =
-    spot.SpotImages?.filter((img) => !img.preview).slice(0, 4) || [];
-
-  const { avgRating, numReviews, Reviews = [] } = spot;
+  const avgRating = spot.avgStarRating;
+  const numReviews = spot.numReviews;
 
   const reviewSummary =
     numReviews > 0
@@ -49,19 +42,18 @@ function SpotDetails() {
         }`
       : "New";
 
-  const sortedReviews = [...Reviews].sort(
+  const sortedReviews = [...(spot.Reviews || [])].sort(
     (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
   );
 
   const canPostReview = () => {
     if (!sessionUser) return false;
-    if (spot.Owner?.id === sessionUser.id) return false;
-    return !Reviews.some((review) => review.User?.id === sessionUser.id);
+    if (spot.ownerId === sessionUser.id) return false;
+    return !sortedReviews.some((review) => review.userId === sessionUser.id);
   };
 
   return (
     <div className="spot-details-container">
-      {/* ... Keep all existing code until the reviews section ... */}
       <h1>{spot.name}</h1>
       <div className="spot-location">
         {spot.city}, {spot.state}, {spot.country}
@@ -72,18 +64,18 @@ function SpotDetails() {
       </div>
 
       <div className="spot-images-container">
-        <div className="primary-image">
-          <img src={primaryImage} alt={`${spot.name} primary view`} />
-        </div>
-        <div className="secondary-images">
-          {secondaryImages.map((img, index) => (
-            <img
-              key={img.id}
-              src={img.url}
-              alt={`${spot.name} view ${index + 1}`}
-            />
-          ))}
-        </div>
+        {primaryImage && (
+          <div className="primary-image">
+            <img src={primaryImage} alt={`${spot.name} primary view`} />
+          </div>
+        )}
+        {secondaryImages && (
+          <div className="secondary-images">
+            {secondaryImages.map((img) => (
+              <img key={img.id} src={img.url} alt={`${spot.name} view`} />
+            ))}
+          </div>
+        )}
       </div>
 
       <div className="spot-info-container">
@@ -135,7 +127,7 @@ function SpotDetails() {
                   })}
                 </p>
                 <p className="review-text">{review.review}</p>
-                {sessionUser && sessionUser.id === review.User.id && (
+                {sessionUser && sessionUser.id === review.userId && (
                   <div className="review-actions">
                     <OpenModalButton
                       buttonText="Delete"

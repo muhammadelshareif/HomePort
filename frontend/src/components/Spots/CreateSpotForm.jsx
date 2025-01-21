@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { createNewSpot } from "../../store/spots";
 import "./CreateSpotForm.css";
 
 function CreateSpotForm() {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const sessionUser = useSelector((state) => state.session.user);
   const [isLoading, setIsLoading] = useState(true);
@@ -55,58 +57,29 @@ function CreateSpotForm() {
       newErrors.previewImage = "Preview image is required";
     }
 
-    return newErrors;
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitted(true);
 
-    const validationErrors = validateForm();
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
+    if (!validateForm()) {
       return;
     }
 
     try {
-      const csrfToken = document.cookie
-        .split("; ")
-        .find((row) => row.startsWith("XSRF-TOKEN"))
-        ?.split("=")[1];
-
-      if (!csrfToken) {
-        throw new Error("CSRF token not found");
-      }
-
-      const response = await fetch("/api/spots", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "XSRF-TOKEN": decodeURIComponent(csrfToken),
-        },
-        credentials: "include",
-        body: JSON.stringify({
-          country: formData.country,
-          address: formData.address,
-          city: formData.city,
-          state: formData.state,
-          name: formData.name,
-          description: formData.description,
-          price: Number(formData.price),
-          previewImage: formData.previewImage,
-        }),
-      });
-
-      if (response.ok) {
-        const newSpot = await response.json();
-        navigate(`/spots/${newSpot.id}`);
-      } else {
-        const data = await response.json();
-        setErrors(data.errors || { submit: "Failed to create spot" });
-      }
+      const newSpot = await dispatch(createNewSpot(formData));
+      navigate(`/spots/${newSpot.id}`);
     } catch (error) {
       console.error("Error submitting form:", error);
-      setErrors({ submit: "An error occurred. Please try again." });
+      if (error.json) {
+        const data = await error.json();
+        setErrors(data.errors || { submit: "Failed to create spot" });
+      } else {
+        setErrors({ submit: "An error occurred. Please try again." });
+      }
     }
   };
 
@@ -118,6 +91,7 @@ function CreateSpotForm() {
     }));
   };
 
+  // Rest of your JSX remains exactly the same
   return (
     <div className="spot-form-container">
       <h1>Create a New Spot</h1>

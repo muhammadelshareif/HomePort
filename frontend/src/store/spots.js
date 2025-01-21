@@ -63,21 +63,40 @@ export const createNewSpot = (spotData) => async (dispatch) => {
   try {
     const response = await csrfFetch("/api/spots", {
       method: "POST",
-      body: JSON.stringify(spotData),
+      body: JSON.stringify({
+        country: spotData.country,
+        address: spotData.address,
+        city: spotData.city,
+        state: spotData.state,
+        name: spotData.name,
+        description: spotData.description,
+        price: Number(spotData.price),
+      }),
     });
+
+    if (!response.ok) throw response;
+
     const spot = await response.json();
 
-    // Handle spot images
-    if (spotData.images && spotData.images.length > 0) {
-      for (let i = 0; i < spotData.images.length; i++) {
-        await csrfFetch(`/api/spots/${spot.id}/images`, {
-          method: "POST",
-          body: JSON.stringify({
-            url: spotData.images[i],
-            preview: i === 0,
-          }),
-        });
-      }
+    if (spotData.previewImage) {
+      await csrfFetch(`/api/spots/${spot.id}/images`, {
+        method: "POST",
+        body: JSON.stringify({ url: spotData.previewImage, preview: true }),
+      });
+    }
+
+    const additionalImages = [
+      spotData.image1,
+      spotData.image2,
+      spotData.image3,
+      spotData.image4,
+    ].filter(Boolean);
+
+    for (let imageUrl of additionalImages) {
+      await csrfFetch(`/api/spots/${spot.id}/images`, {
+        method: "POST",
+        body: JSON.stringify({ url: imageUrl, preview: false }),
+      });
     }
 
     dispatch(createSpot(spot));
@@ -109,7 +128,7 @@ export const deleteExistingSpot = (spotId) => async (dispatch) => {
       method: "DELETE",
     });
     if (response.ok) {
-      dispatch(deleteSpot(spotId)); // Only dispatch if deletion is successful
+      dispatch(deleteSpot(spotId));
     } else {
       throw new Error("Failed to delete spot");
     }
@@ -144,7 +163,15 @@ const spotsReducer = (state = initialState, action) => {
     case LOAD_SPOTS: {
       const normalizedSpots = {};
       action.payload.forEach((spot) => {
-        normalizedSpots[spot.id] = spot;
+        normalizedSpots[spot.id] = {
+          ...spot,
+          id: spot.id,
+          name: spot.name,
+          city: spot.city,
+          state: spot.state,
+          price: spot.price,
+          previewImage: spot.previewImage,
+        };
       });
       return {
         ...state,
@@ -155,35 +182,6 @@ const spotsReducer = (state = initialState, action) => {
       return {
         ...state,
         currentSpot: action.payload,
-      };
-    }
-    case CREATE_SPOT: {
-      return {
-        ...state,
-        allSpots: {
-          ...state.allSpots,
-          [action.payload.id]: action.payload,
-        },
-        currentSpot: action.payload,
-      };
-    }
-    case UPDATE_SPOT: {
-      return {
-        ...state,
-        allSpots: {
-          ...state.allSpots,
-          [action.payload.id]: action.payload,
-        },
-        currentSpot: action.payload,
-      };
-    }
-    case DELETE_SPOT: {
-      const newAllSpots = { ...state.allSpots };
-      delete newAllSpots[action.payload];
-      return {
-        ...state,
-        allSpots: newAllSpots,
-        currentSpot: null,
       };
     }
     case LOAD_USER_SPOTS: {

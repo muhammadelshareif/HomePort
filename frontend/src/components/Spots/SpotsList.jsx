@@ -8,38 +8,44 @@ function SpotsList() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const spots = useSelector((state) => Object.values(state.spots.allSpots));
+  const isLoading = useSelector((state) => state.spots.isLoading);
 
-  console.log("Spots from Redux:", spots);
-  // Fetch spots data when the component mounts
   useEffect(() => {
     dispatch(fetchSpots());
   }, [dispatch]);
-
-  // Log spots data to debug and ensure multiple spots are loaded
-  console.log("Spots:", spots);
 
   const handleSpotClick = (spotId) => {
     navigate(`/spots/${spotId}`);
   };
 
+  if (isLoading) {
+    return <div>Loading spots...</div>;
+  }
+
   return (
     <div className="spots-container">
       <div className="spots-grid">
         {spots.length === 0 ? (
-          <p>No spots available</p> // If no spots, display a message
+          <p>No spots available</p>
         ) : (
           spots.map((spot) => (
             <div
               key={spot.id}
               className="spot-tile"
               onClick={() => handleSpotClick(spot.id)}
-              title={spot.name} // Tooltip shows the spot name
+              title={spot.name}
             >
               <div className="spot-image-container">
                 <img
-                  src={spot.previewImage}
+                  src={spot.previewImage || "https://via.placeholder.com/150"}
                   alt={spot.name}
                   className="spot-image"
+                  onError={(e) => {
+                    if (e.target.src !== "https://via.placeholder.com/150") {
+                      console.warn(`Failed to load image for spot ${spot.id}`);
+                      e.target.src = "https://via.placeholder.com/150";
+                    }
+                  }}
                 />
               </div>
               <div className="spot-info">
@@ -49,15 +55,12 @@ function SpotsList() {
                   </span>
                   <span className="spot-rating">
                     <i className="fas fa-star"></i>
-                    {spot.avgRating
-                      ? Number(spot.avgRating).toFixed(1)
-                      : "New"}{" "}
-                    {/* Display average rating or "New" */}
+                    {spot.avgRating ? Number(spot.avgRating).toFixed(1) : "New"}
                   </span>
                 </div>
                 <div className="spot-price">
                   <span className="price">${spot.price}</span>
-                  <span className="night">night</span>
+                  <span className="night"> / night</span>
                 </div>
               </div>
             </div>
