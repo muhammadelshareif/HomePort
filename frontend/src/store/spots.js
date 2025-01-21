@@ -5,8 +5,14 @@ const LOAD_SPOT_DETAILS = "spots/LOAD_SPOT_DETAILS";
 
 // Action Creator for fetching all spots
 export const fetchSpots = () => async (dispatch) => {
+  // Determine the base URL dynamically based on the environment
+  const baseUrl =
+    process.env.NODE_ENV === "production"
+      ? "https://your-backend-url.onrender.com/api/spots" // Replace with your deployed backend URL
+      : "http://localhost:8000/api/spots"; // Localhost for development
+
   try {
-    const response = await csrfFetch("http://localhost:8000/api/spots");
+    const response = await csrfFetch(baseUrl);
     const data = await response.json();
     dispatch({
       type: LOAD_SPOTS,
@@ -20,8 +26,14 @@ export const fetchSpots = () => async (dispatch) => {
 
 // Action Creator for fetching spot details
 export const fetchSpotDetails = (spotId) => async (dispatch) => {
+  // Determine the base URL dynamically based on the environment
+  const baseUrl =
+    process.env.NODE_ENV === "production"
+      ? `https://your-backend-url.onrender.com/api/spots/${spotId}` // Replace with your deployed backend URL
+      : `http://localhost:8000/api/spots/${spotId}`; // Localhost for development
+
   try {
-    const response = await csrfFetch(`/api/spots/${spotId}`);
+    const response = await csrfFetch(baseUrl);
     const data = await response.json();
     dispatch({
       type: LOAD_SPOT_DETAILS,
