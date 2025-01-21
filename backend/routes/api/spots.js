@@ -110,7 +110,7 @@ router.get("/:spotId", async (req, res) => {
         model: Review,
         include: {
           model: User,
-          attributes: ["firstName"],
+          attributes: ["firstName"], // Include reviewer's first name
         },
       },
     ],
@@ -121,11 +121,21 @@ router.get("/:spotId", async (req, res) => {
   }
 
   const data = spot.get({ plain: true });
+
+  // Calculate average rating
   const avgRating =
     data.Reviews.length > 0
       ? data.Reviews.reduce((sum, r) => sum + r.stars, 0) / data.Reviews.length
       : null;
-  const numReviews = data.Reviews.length;
+
+  // Format reviews
+  const reviews = data.Reviews.map((review) => ({
+    id: review.id,
+    review: review.review,
+    stars: review.stars,
+    createdAt: review.createdAt,
+    User: { firstName: review.User.firstName },
+  }));
 
   const formattedSpot = {
     id: data.id,
@@ -138,9 +148,10 @@ router.get("/:spotId", async (req, res) => {
     description: data.description,
     price: data.price,
     avgRating,
-    numReviews,
+    numReviews: data.Reviews.length,
     SpotImages: data.SpotImages,
     Owner: data.Owner,
+    Reviews: reviews, // Add formatted reviews
   };
 
   res.status(200).json(formattedSpot);
