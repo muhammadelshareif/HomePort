@@ -46,15 +46,15 @@ module.exports = {
           allowNull: false,
         },
         name: {
-          type: Sequelize.STRING(30),
+          type: Sequelize.STRING(50), // Updated to 50 to allow longer names
           allowNull: false,
         },
         description: {
-          type: Sequelize.STRING(30),
+          type: Sequelize.STRING(255), // Updated to allow longer descriptions
           allowNull: false,
         },
         price: {
-          type: Sequelize.DECIMAL(10, 20),
+          type: Sequelize.DECIMAL(10, 2), // Corrected decimal precision
           allowNull: false,
         },
         createdAt: {
@@ -71,6 +71,7 @@ module.exports = {
       options
     );
   },
+
   async down(queryInterface, Sequelize) {
     options.tableName = "Spots";
     await queryInterface.dropTable(options);
