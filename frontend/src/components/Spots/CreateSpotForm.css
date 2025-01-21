@@ -1,0 +1,100 @@
+/* Ensure the form content is not hidden under the fixed navbar */
+.create-spot-form {
+  padding-top: 100px; /* Adjust the padding-top to prevent form from being covered by navbar */
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: "Poppins", sans-serif;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+}
+
+/* Form header styling */
+.create-spot-form h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #312e81; /* Deep blue color */
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Label styling for form fields */
+.create-spot-form label {
+  display: block;
+  font-size: 16px;
+  font-weight: 500;
+  color: #222222;
+  margin-bottom: 8px;
+}
+
+/* Styling input fields and textarea */
+.create-spot-form input,
+.create-spot-form textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 16px;
+  box-sizing: border-box;
+}
+
+.create-spot-form input:focus,
+.create-spot-form textarea:focus {
+  outline: 2px solid #6366f1; /* Blue outline on focus */
+  border-color: #6366f1;
+}
+
+/* Button styling */
+.create-spot-form button {
+  padding: 12px 20px;
+  background-color: #6366f1; /* Blue background */
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  display: block;
+  width: 100%;
+}
+
+.create-spot-form button:hover {
+  background-color: #4e56e1; /* Darker blue on hover */
+}
+
+.create-spot-form button:focus {
+  outline: 2px solid #6366f1;
+  outline-offset: 2px;
+}
+
+/* Responsive Design - Adjust the form layout for smaller screens */
+@media screen and (max-width: 768px) {
+  .create-spot-form {
+    padding: 15px;
+    max-width: 100%;
+  }
+
+  .create-spot-form h1 {
+    font-size: 20px;
+  }
+
+  .create-spot-form label {
+    font-size: 14px;
+  }
+
+  .create-spot-form input,
+  .create-spot-form textarea {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .create-spot-form button {
+    font-size: 14px;
+    padding: 10px 15px;
+  }
+}

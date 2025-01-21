@@ -6,7 +6,7 @@ const LOAD_SPOT_DETAILS = "spots/LOAD_SPOT_DETAILS";
 // Action Creator for fetching all spots
 export const fetchSpots = () => async (dispatch) => {
   try {
-    const response = await csrfFetch("/api/spots");
+    const response = await csrfFetch("http://localhost:8000/api/spots");
     const data = await response.json();
     dispatch({
       type: LOAD_SPOTS,

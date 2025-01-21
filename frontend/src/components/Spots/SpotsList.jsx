@@ -9,6 +9,7 @@ function SpotsList() {
   const navigate = useNavigate();
   const spots = useSelector((state) => Object.values(state.spots.allSpots));
 
+  console.log("Spots from Redux:", spots);
   // Fetch spots data when the component mounts
   useEffect(() => {
     dispatch(fetchSpots());
