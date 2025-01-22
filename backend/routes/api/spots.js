@@ -107,8 +107,8 @@ router.post("/", requireAuth, async (req, res) => {
       city,
       state,
       country,
-      lat,
-      lng,
+      lat = null,
+      lng = null,
       description,
       price,
     } = req.body;
@@ -142,6 +142,8 @@ router.post("/", requireAuth, async (req, res) => {
       city,
       state,
       country,
+      lat,
+      lng,
       description,
       price,
     });
