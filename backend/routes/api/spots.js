@@ -110,17 +110,8 @@ router.get("/:spotId", async (req, res) => {
 // Create a new Spot
 router.post("/", requireAuth, async (req, res) => {
   try {
-    const {
-      name,
-      address,
-      city,
-      state,
-      country,
-      lat,
-      lng,
-      description,
-      price,
-    } = req.body;
+    const { name, address, city, state, country, description, price } =
+      req.body;
 
     // Validate required fields
     const requiredFields = [
@@ -129,8 +120,6 @@ router.post("/", requireAuth, async (req, res) => {
       "city",
       "state",
       "country",
-      "lat",
-      "lng",
       "description",
       "price",
     ];
@@ -154,8 +143,6 @@ router.post("/", requireAuth, async (req, res) => {
       city,
       state,
       country,
-      lat,
-      lng,
       description,
       price,
     });
