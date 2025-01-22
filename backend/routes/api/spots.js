@@ -1,37 +1,13 @@
 const express = require("express");
 const { Spot, SpotImage, Review } = require("../../db/models");
-const { requireAuth } = require("../../utils/auth"); // If authentication is required
+const { requireAuth } = require("../../utils/auth");
 const router = express.Router();
 
 router.get("/", async (req, res) => {
   try {
-    console.log("DEBUG: Accessing GET /api/spots route");
-    console.log(
-      "Authenticated User:",
-      req.user ? req.user.id : "Not authenticated"
-    );
-
     const spots = await Spot.findAll({
       include: [SpotImage, Review],
     });
-
-    console.log("Raw Spots Count:", spots.length);
-    console.log(
-      "Raw Spots Details:",
-      JSON.stringify(
-        spots.map((spot) => {
-          const plainSpot = spot.get({ plain: true });
-          return {
-            id: plainSpot.id,
-            name: plainSpot.name,
-            reviewCount: plainSpot.Reviews.length,
-            imageCount: plainSpot.SpotImages.length,
-          };
-        }),
-        null,
-        2
-      )
-    );
 
     const formattedSpots = spots.map((spot) => {
       const data = spot.get({ plain: true });
@@ -46,21 +22,22 @@ router.get("/", async (req, res) => {
 
       return {
         id: data.id,
+        ownerId: data.ownerId,
         name: data.name,
+        description: data.description,
         city: data.city,
         state: data.state,
+        country: data.country,
+        lat: data.lat,
+        lng: data.lng,
         price: data.price,
         avgRating,
         previewImage,
       };
     });
 
-    console.log("Formatted Spots Count:", formattedSpots.length);
-    console.log("Formatted Spots:", JSON.stringify(formattedSpots, null, 2));
-
     res.status(200).json({ Spots: formattedSpots });
   } catch (error) {
-    console.error("Error in GET /api/spots:", error);
     res.status(500).json({
       message: "Internal server error",
       error: error.message,
@@ -68,7 +45,6 @@ router.get("/", async (req, res) => {
   }
 });
 
-// Get Spot by ID
 router.get("/:spotId", async (req, res) => {
   const spotId = parseInt(req.params.spotId, 10);
 
@@ -95,9 +71,14 @@ router.get("/:spotId", async (req, res) => {
 
   const formattedSpot = {
     id: data.id,
+    ownerId: data.ownerId,
     name: data.name,
+    description: data.description,
     city: data.city,
     state: data.state,
+    country: data.country,
+    lat: data.lat,
+    lng: data.lng,
     price: data.price,
     avgRating,
     SpotImages: data.SpotImages,
@@ -107,13 +88,20 @@ router.get("/:spotId", async (req, res) => {
   res.status(200).json(formattedSpot);
 });
 
-// Create a new Spot
 router.post("/", requireAuth, async (req, res) => {
   try {
-    const { name, address, city, state, country, description, price } =
-      req.body;
+    const {
+      name,
+      address,
+      city,
+      state,
+      country,
+      lat,
+      lng,
+      description,
+      price,
+    } = req.body;
 
-    // Validate required fields
     const requiredFields = [
       "name",
       "address",
@@ -123,6 +111,7 @@ router.post("/", requireAuth, async (req, res) => {
       "description",
       "price",
     ];
+
     const missingFields = requiredFields.filter((field) => !req.body[field]);
 
     if (missingFields.length > 0) {
@@ -135,7 +124,6 @@ router.post("/", requireAuth, async (req, res) => {
       });
     }
 
-    // Create the spot with the current user as the owner
     const newSpot = await Spot.create({
       ownerId: req.user.id,
       name,
@@ -147,14 +135,13 @@ router.post("/", requireAuth, async (req, res) => {
       price,
     });
 
-    // Return the created spot
     return res.status(201).json(newSpot);
   } catch (error) {
-    console.error("Error creating spot:", error);
     return res.status(500).json({
       message: "Internal server error",
       error: error.message,
     });
   }
 });
+
 module.exports = router;
