@@ -11,6 +11,11 @@ export default defineConfig(({ mode }) => ({
       failOnError: mode === "production",
     }),
   ],
+  base: "/",
+  build: {
+    outDir: "dist",
+    emptyOutDir: true,
+  },
   resolve: {
     alias: {
       "@context": path.resolve(__dirname, "src/context"),
