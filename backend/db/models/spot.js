@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
       });
       Spot.belongsTo(models.User, {
         foreignKey: "ownerId",
-        as: "Owner", // Add the alias here
+        as: "Owner",
         onDelete: "CASCADE",
       });
     }
@@ -31,28 +31,28 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: "CASCADE",
       },
       address: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(255),
         allowNull: false,
         validate: {
           notEmpty: { msg: "Street address is required" },
         },
       },
       city: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(100),
         allowNull: false,
         validate: {
           notEmpty: { msg: "City is required" },
         },
       },
       state: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(100),
         allowNull: false,
         validate: {
           notEmpty: { msg: "State is required" },
         },
       },
       country: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(100),
         allowNull: false,
         validate: {
           notEmpty: { msg: "Country is required" },
@@ -61,42 +61,19 @@ module.exports = (sequelize, DataTypes) => {
       lat: {
         type: DataTypes.FLOAT,
         allowNull: true,
-        validate: {
-          isDecimal: true,
-          min: {
-            args: [-90],
-            msg: "Latitude must be greater than or equal to -90",
-          },
-          max: {
-            args: [90],
-            msg: "Latitude must be less than or equal to 90",
-          },
-        },
       },
-
       lng: {
         type: DataTypes.FLOAT,
         allowNull: true,
-        validate: {
-          isDecimal: true,
-          min: {
-            args: [-180],
-            msg: "Longitude must be greater than or equal to -180",
-          },
-          max: {
-            args: [180],
-            msg: "Longitude must be less than or equal to 180",
-          },
-        },
       },
       name: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(100),
         allowNull: false,
         validate: {
           notEmpty: { msg: "Name is required" },
           len: {
-            args: [1, 50],
-            msg: "Name must be less than 50 characters",
+            args: [1, 100],
+            msg: "Name must be less than 100 characters",
           },
         },
       },
