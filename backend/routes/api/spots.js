@@ -9,8 +9,16 @@ router.get("/", async (req, res) => {
       include: [SpotImage, Review],
     });
 
+    console.log("Total spots found:", spots.length);
+
     const formattedSpots = spots.map((spot) => {
       const data = spot.get({ plain: true });
+      console.log(
+        `Processing spot ${data.id}: ${data.name}, Images: ${
+          data.SpotImages?.length || 0
+        }`
+      );
+
       const avgRating =
         data.Reviews.length > 0
           ? data.Reviews.reduce((sum, r) => sum + r.stars, 0) /
@@ -19,6 +27,7 @@ router.get("/", async (req, res) => {
 
       const previewImage =
         data.SpotImages.find((img) => img.preview)?.url || null;
+      console.log(`Spot ${data.id} preview image:`, previewImage);
 
       return {
         id: data.id,
@@ -36,8 +45,10 @@ router.get("/", async (req, res) => {
       };
     });
 
+    console.log("Total formatted spots:", formattedSpots.length);
     res.status(200).json({ Spots: formattedSpots });
   } catch (error) {
+    console.error("Error in GET /spots:", error);
     res.status(500).json({
       message: "Internal server error",
       error: error.message,
