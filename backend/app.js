@@ -78,6 +78,16 @@ app.use((req, res, next) => {
 // Routes
 app.use(routes);
 
+const path = require("path");
+
+// Serve static files from frontend/dist
+app.use(express.static(path.join(__dirname, "../frontend/dist")));
+
+// Serve frontend's index.html for all unmatched routes
+app.use("*", (_req, res) => {
+  res.sendFile(path.join(__dirname, "../frontend/dist/index.html"));
+});
+
 // Catch unhandled requests and forward to error handler
 app.use((_req, _res, next) => {
   const err = new Error("The requested resource couldn't be found.");
