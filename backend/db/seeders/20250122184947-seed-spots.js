@@ -9,6 +9,8 @@ module.exports = {
         city: "Malibu",
         state: "California",
         country: "USA",
+        lat: null,
+        lng: null,
         name: "Beachfront Villa",
         description:
           "Luxurious villa with direct beach access and panoramic ocean views",
@@ -22,6 +24,8 @@ module.exports = {
         city: "Aspen",
         state: "Colorado",
         country: "USA",
+        lat: null,
+        lng: null,
         name: "Mountain Chalet",
         description:
           "Cozy ski-in/ski-out chalet with hot tub and stunning mountain views",
@@ -35,6 +39,8 @@ module.exports = {
         city: "Scottsdale",
         state: "Arizona",
         country: "USA",
+        lat: null,
+        lng: null,
         name: "Desert Oasis",
         description:
           "Modern desert retreat with infinity pool and mountain views",

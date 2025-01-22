@@ -39,11 +39,11 @@ module.exports = {
         },
         lat: {
           type: Sequelize.FLOAT,
-          allowNull: false,
+          allowNull: true,
         },
         lng: {
           type: Sequelize.FLOAT,
-          allowNull: false,
+          allowNull: true,
         },
         name: {
           type: Sequelize.STRING(50), // Updated to 50 to allow longer names
