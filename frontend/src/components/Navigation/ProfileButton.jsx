@@ -89,6 +89,8 @@ import * as sessionActions from "../../store/session";
 import OpenModalButton from "../OpenModalButton";
 import LoginFormModal from "../LoginFormModal";
 import SignupFormModal from "../SignupFormModal";
+import SpotManagement from "../SpotManagement";
+import Reviews from "../Reviews";
 
 function ProfileButton({ user }) {
   const dispatch = useDispatch();
@@ -156,6 +158,22 @@ function ProfileButton({ user }) {
                 buttonText="Sign Up"
                 onButtonClick={closeMenu}
                 modalComponent={<SignupFormModal />}
+                className="modal-button"
+              />
+            </li>
+            <li>
+              <OpenModalButton
+                buttonText="Manage Spots"
+                onButtonClick={closeMenu}
+                modalComponent={<SpotManagement />}
+                className="modal-button"
+              />
+            </li>
+            <li>
+              <OpenModalButton
+                buttonText="Manage Reviews"
+                onButtonClick={closeMenu}
+                modalComponent={<Reviews />}
                 className="modal-button"
               />
             </li>
