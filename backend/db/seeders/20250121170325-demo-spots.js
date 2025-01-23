@@ -3,7 +3,7 @@
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.bulkInsert(
-      "Spots",
+      { tableName: "Spots", schema: "lodging_schema" }, // Explicitly specify schema
       [
         {
           ownerId: 1, // Ensure this matches an existing user ID
@@ -39,6 +39,10 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkDelete("Spots", null, {});
+    await queryInterface.bulkDelete(
+      { tableName: "Spots", schema: "lodging_schema" }, // Explicitly specify schema
+      null,
+      {}
+    );
   },
 };
