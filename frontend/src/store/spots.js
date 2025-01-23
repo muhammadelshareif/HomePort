@@ -157,7 +157,8 @@ const initialState = {
   userSpots: {},
 };
 
-// Reducer
+// Rest of your spots.js file remains the same until the reducer...
+
 const spotsReducer = (state = initialState, action) => {
   switch (action.type) {
     case LOAD_SPOTS: {
@@ -176,6 +177,15 @@ const spotsReducer = (state = initialState, action) => {
       return {
         ...state,
         allSpots: normalizedSpots,
+      };
+    }
+    case CREATE_SPOT: {
+      return {
+        ...state,
+        allSpots: {
+          ...state.allSpots,
+          [action.payload.id]: action.payload,
+        },
       };
     }
     case LOAD_SPOT_DETAILS: {

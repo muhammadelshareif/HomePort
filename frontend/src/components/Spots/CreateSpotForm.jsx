@@ -74,12 +74,10 @@ function CreateSpotForm() {
       navigate(`/spots/${newSpot.id}`);
     } catch (error) {
       console.error("Error submitting form:", error);
-      if (error.json) {
-        const data = await error.json();
-        setErrors(data.errors || { submit: "Failed to create spot" });
-      } else {
-        setErrors({ submit: "An error occurred. Please try again." });
-      }
+      const errorData = (await error.response?.json?.()) || {
+        errors: { submit: "Failed to create spot" },
+      };
+      setErrors(errorData.errors || { submit: "Failed to create spot" });
     }
   };
 
