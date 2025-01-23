@@ -21,9 +21,7 @@ module.exports = {
         rejectUnauthorized: false,
       },
     },
-    define: {
-      schema: process.env.SCHEMA,
-    },
+
     pool: {
       max: 5,
       min: 0,
