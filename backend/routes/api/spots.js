@@ -101,17 +101,8 @@ router.get("/:spotId", async (req, res) => {
 
 router.post("/", requireAuth, async (req, res) => {
   try {
-    const {
-      name,
-      address,
-      city,
-      state,
-      country,
-      lat = null,
-      lng = null,
-      description,
-      price,
-    } = req.body;
+    const { name, address, city, state, country, description, price } =
+      req.body;
 
     const requiredFields = [
       "name",
@@ -142,14 +133,13 @@ router.post("/", requireAuth, async (req, res) => {
       city,
       state,
       country,
-      lat,
-      lng,
       description,
       price,
     });
 
     return res.status(201).json(newSpot);
   } catch (error) {
+    console.error("Create spot error:", error);
     return res.status(500).json({
       message: "Internal server error",
       error: error.message,
