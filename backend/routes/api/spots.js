@@ -153,5 +153,40 @@ router.post(
     }
   }
 );
+// POST add image to a spot
+router.post("/:spotId/images", requireAuth, async (req, res) => {
+  const spotId = parseInt(req.params.spotId, 10);
+  const { url, preview } = req.body;
+
+  try {
+    const spot = await Spot.findByPk(spotId);
+    if (!spot) {
+      return res.status(404).json({ message: "Spot couldn't be found" });
+    }
+
+    // Optional: Check if user owns the spot
+    if (spot.ownerId !== req.user.id) {
+      return res.status(403).json({ message: "Forbidden" });
+    }
+
+    const newImage = await SpotImage.create({
+      spotId,
+      url,
+      preview: preview || false,
+    });
+
+    res.status(201).json({
+      id: newImage.id,
+      url: newImage.url,
+      preview: newImage.preview,
+    });
+  } catch (error) {
+    console.error("Error adding spot image:", error);
+    res.status(500).json({
+      message: "Internal server error",
+      error: error.message,
+    });
+  }
+});
 
 module.exports = router;
