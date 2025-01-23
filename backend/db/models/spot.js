@@ -1,62 +1,53 @@
 "use strict";
-const { Model, Validator } = require("sequelize");
+
+const { Model } = require("sequelize");
 
 module.exports = (sequelize, DataTypes) => {
   class Spot extends Model {
     static associate(models) {
-      Spot.hasMany(models.SpotImage, {
-        foreignKey: "spotId",
-        onDelete: "CASCADE",
-      });
-      Spot.hasMany(models.Review, {
-        foreignKey: "spotId",
-        onDelete: "CASCADE",
-      });
       Spot.belongsTo(models.User, {
         foreignKey: "ownerId",
         as: "Owner",
         onDelete: "CASCADE",
       });
+
+      Spot.hasMany(models.SpotImage, {
+        foreignKey: "spotId",
+        onDelete: "CASCADE",
+      });
+
+      Spot.hasMany(models.Review, {
+        foreignKey: "spotId",
+        onDelete: "CASCADE",
+      });
     }
   }
+
   Spot.init(
     {
       ownerId: {
-        type: DataTypes.STRING,
+        type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-          model: "User",
+          model: "Users",
           key: "id",
         },
-        onDelete: "CASCADE",
       },
       address: {
         type: DataTypes.STRING(255),
         allowNull: false,
-        validate: {
-          notEmpty: { msg: "Street address is required" },
-        },
       },
       city: {
         type: DataTypes.STRING(100),
         allowNull: false,
-        validate: {
-          notEmpty: { msg: "City is required" },
-        },
       },
       state: {
         type: DataTypes.STRING(100),
         allowNull: false,
-        validate: {
-          notEmpty: { msg: "State is required" },
-        },
       },
       country: {
         type: DataTypes.STRING(100),
         allowNull: false,
-        validate: {
-          notEmpty: { msg: "Country is required" },
-        },
       },
       lat: {
         type: DataTypes.FLOAT,
@@ -69,29 +60,16 @@ module.exports = (sequelize, DataTypes) => {
       name: {
         type: DataTypes.STRING(100),
         allowNull: false,
-        validate: {
-          notEmpty: { msg: "Name is required" },
-          len: {
-            args: [1, 100],
-            msg: "Name must be less than 100 characters",
-          },
-        },
       },
       description: {
         type: DataTypes.TEXT,
         allowNull: false,
-        validate: {
-          notEmpty: { msg: "Description is required" },
-        },
       },
       price: {
-        type: DataTypes.DECIMAL,
+        type: DataTypes.DECIMAL(10, 2),
         allowNull: false,
         validate: {
-          min: {
-            args: [0],
-            msg: "Price must be a positive number",
-          },
+          min: 0,
         },
       },
     },
