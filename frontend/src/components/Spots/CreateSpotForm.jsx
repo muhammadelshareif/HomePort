@@ -46,8 +46,8 @@ function CreateSpotForm() {
     if (!formData.address) newErrors.address = "Street address is required";
     if (!formData.city) newErrors.city = "City is required";
     if (!formData.state) newErrors.state = "State is required";
-    if (!formData.description || formData.description.length < 30) {
-      newErrors.description = "Description needs 30 or more characters";
+    if (!formData.description) {
+      newErrors.description = "Description is required";
     }
     if (!formData.name) newErrors.name = "Name is required";
     if (!formData.price || formData.price <= 0) {
