@@ -1,14 +1,13 @@
 import { csrfFetch } from "./csrf";
 
-// Action Types
 const LOAD_SPOTS = "spots/LOAD_SPOTS";
 const LOAD_SPOT_DETAILS = "spots/LOAD_SPOT_DETAILS";
 const CREATE_SPOT = "spots/CREATE_SPOT";
 const UPDATE_SPOT = "spots/UPDATE_SPOT";
 const DELETE_SPOT = "spots/DELETE_SPOT";
 const LOAD_USER_SPOTS = "spots/LOAD_USER_SPOTS";
+const SET_LOADING = "spots/SET_LOADING";
 
-// Action Creators
 export const loadSpots = (spots) => ({
   type: LOAD_SPOTS,
   payload: spots,
@@ -34,15 +33,22 @@ export const deleteSpot = (spotId) => ({
   payload: spotId,
 });
 
-// Thunks
+export const setLoading = (isLoading) => ({
+  type: SET_LOADING,
+  payload: isLoading,
+});
+
 export const fetchSpots = () => async (dispatch) => {
+  dispatch(setLoading(true));
   try {
     const response = await csrfFetch("/api/spots");
     const data = await response.json();
     dispatch(loadSpots(data.Spots));
+    dispatch(setLoading(false));
     return data;
   } catch (error) {
     console.error("Error fetching spots:", error);
+    dispatch(setLoading(false));
     throw error;
   }
 };
@@ -155,9 +161,8 @@ const initialState = {
   allSpots: {},
   currentSpot: null,
   userSpots: {},
+  isLoading: true,
 };
-
-// Rest of your spots.js file remains the same until the reducer...
 
 const spotsReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -177,6 +182,13 @@ const spotsReducer = (state = initialState, action) => {
       return {
         ...state,
         allSpots: normalizedSpots,
+        isLoading: false,
+      };
+    }
+    case SET_LOADING: {
+      return {
+        ...state,
+        isLoading: action.payload,
       };
     }
     case CREATE_SPOT: {
@@ -186,12 +198,14 @@ const spotsReducer = (state = initialState, action) => {
           ...state.allSpots,
           [action.payload.id]: action.payload,
         },
+        isLoading: false,
       };
     }
     case LOAD_SPOT_DETAILS: {
       return {
         ...state,
         currentSpot: action.payload,
+        isLoading: false,
       };
     }
     case LOAD_USER_SPOTS: {
@@ -202,6 +216,7 @@ const spotsReducer = (state = initialState, action) => {
       return {
         ...state,
         userSpots: normalizedUserSpots,
+        isLoading: false,
       };
     }
     default:
