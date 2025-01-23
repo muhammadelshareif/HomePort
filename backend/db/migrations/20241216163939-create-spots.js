@@ -4,7 +4,7 @@ const { DECIMAL } = require("sequelize");
 
 let options = {};
 if (process.env.NODE_ENV === "production") {
-  options.schema = process.env.SCHEMA;
+  options.schema = "lodging_schema"; // Explicitly set to lodging_schema for development
 }
 
 module.exports = {
@@ -20,21 +20,22 @@ module.exports = {
         },
         ownerId: {
           type: Sequelize.INTEGER,
+          allowNull: false, // Add this for consistency
         },
         address: {
-          type: Sequelize.STRING(30),
+          type: Sequelize.STRING(255), // Increased length from 30 to 255
           allowNull: false,
         },
         city: {
-          type: Sequelize.STRING(30),
+          type: Sequelize.STRING(100), // Increased length from 30 to 100
           allowNull: false,
         },
         state: {
-          type: Sequelize.STRING(30),
+          type: Sequelize.STRING(100), // Increased length from 30 to 100
           allowNull: false,
         },
         country: {
-          type: Sequelize.STRING(30),
+          type: Sequelize.STRING(100), // Increased length from 30 to 100
           allowNull: false,
         },
         lat: {
@@ -46,15 +47,15 @@ module.exports = {
           allowNull: true,
         },
         name: {
-          type: Sequelize.STRING(50), // Updated to 50 to allow longer names
+          type: Sequelize.STRING(50), // Name length set to 50
           allowNull: false,
         },
         description: {
-          type: Sequelize.STRING(255), // Updated to allow longer descriptions
+          type: Sequelize.TEXT, // Use TEXT for longer descriptions
           allowNull: false,
         },
         price: {
-          type: Sequelize.DECIMAL(10, 2), // Corrected decimal precision
+          type: Sequelize.DECIMAL(10, 2), // Correct decimal precision for prices
           allowNull: false,
         },
         createdAt: {
