@@ -1,8 +1,10 @@
 const express = require("express");
 const { Spot, SpotImage, Review } = require("../../db/models");
 const { requireAuth } = require("../../utils/auth");
+const { check, validationResult } = require("express-validator");
 const router = express.Router();
 
+// GET all spots
 router.get("/", async (req, res) => {
   try {
     const spots = await Spot.findAll({
@@ -13,12 +15,6 @@ router.get("/", async (req, res) => {
 
     const formattedSpots = spots.map((spot) => {
       const data = spot.get({ plain: true });
-      console.log(
-        `Processing spot ${data.id}: ${data.name}, Images: ${
-          data.SpotImages?.length || 0
-        }`
-      );
-
       const avgRating =
         data.Reviews.length > 0
           ? data.Reviews.reduce((sum, r) => sum + r.stars, 0) /
@@ -27,7 +23,6 @@ router.get("/", async (req, res) => {
 
       const previewImage =
         data.SpotImages.find((img) => img.preview)?.url || null;
-      console.log(`Spot ${data.id} preview image:`, previewImage);
 
       return {
         id: data.id,
@@ -45,7 +40,6 @@ router.get("/", async (req, res) => {
       };
     });
 
-    console.log("Total formatted spots:", formattedSpots.length);
     res.status(200).json({ Spots: formattedSpots });
   } catch (error) {
     console.error("Error in GET /spots:", error);
@@ -56,6 +50,7 @@ router.get("/", async (req, res) => {
   }
 });
 
+// GET a single spot by ID
 router.get("/:spotId", async (req, res) => {
   const spotId = parseInt(req.params.spotId, 10);
 
@@ -99,52 +94,64 @@ router.get("/:spotId", async (req, res) => {
   res.status(200).json(formattedSpot);
 });
 
-router.post("/", requireAuth, async (req, res) => {
-  try {
-    const { name, address, city, state, country, description, price } =
-      req.body;
-
-    const requiredFields = [
-      "name",
-      "address",
-      "city",
-      "state",
-      "country",
-      "description",
-      "price",
-    ];
-
-    const missingFields = requiredFields.filter((field) => !req.body[field]);
-
-    if (missingFields.length > 0) {
+// POST create a new spot
+router.post(
+  "/",
+  requireAuth,
+  [
+    check("name")
+      .isLength({ max: 50 })
+      .withMessage("Name must not exceed 50 characters"),
+    check("address")
+      .isLength({ max: 255 })
+      .withMessage("Address must not exceed 255 characters"),
+    check("city")
+      .isLength({ max: 100 })
+      .withMessage("City must not exceed 100 characters"),
+    check("state")
+      .isLength({ max: 100 })
+      .withMessage("State must not exceed 100 characters"),
+    check("country")
+      .isLength({ max: 100 })
+      .withMessage("Country must not exceed 100 characters"),
+    check("description")
+      .isLength({ max: 1000 })
+      .withMessage("Description must not exceed 1000 characters"),
+    check("price").isNumeric().withMessage("Price must be a valid number"),
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
       return res.status(400).json({
-        message: "Bad Request",
-        errors: missingFields.reduce((acc, field) => {
-          acc[field] = `${field} is required`;
-          return acc;
-        }, {}),
+        message: "Validation Error",
+        errors: errors.array(),
       });
     }
 
-    const newSpot = await Spot.create({
-      ownerId: req.user.id,
-      name,
-      address,
-      city,
-      state,
-      country,
-      description,
-      price,
-    });
+    const { name, address, city, state, country, description, price } =
+      req.body;
 
-    return res.status(201).json(newSpot);
-  } catch (error) {
-    console.error("Create spot error:", error);
-    return res.status(500).json({
-      message: "Internal server error",
-      error: error.message,
-    });
+    try {
+      const newSpot = await Spot.create({
+        ownerId: req.user.id,
+        name,
+        address,
+        city,
+        state,
+        country,
+        description,
+        price,
+      });
+
+      res.status(201).json(newSpot);
+    } catch (error) {
+      console.error("Create spot error:", error);
+      res.status(500).json({
+        message: "Internal server error",
+        error: error.message,
+      });
+    }
   }
-});
+);
 
 module.exports = router;
