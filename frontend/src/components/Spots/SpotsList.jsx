@@ -22,6 +22,7 @@ function SpotsList() {
     return <div>Loading spots...</div>;
   }
 
+  console.log(spots);
   return (
     <div className="spots-container">
       <div className="spots-grid">
@@ -37,13 +38,13 @@ function SpotsList() {
             >
               <div className="spot-image-container">
                 <img
-                  src={spot.previewImage || "https://via.placeholder.com/150"}
+                  src={spot.previewImage || "https://placehold.co/600x400"}
                   alt={spot.name}
                   className="spot-image"
                   onError={(e) => {
-                    if (e.target.src !== "https://via.placeholder.com/150") {
+                    if (e.target.src !== "https://placehold.co/600x400") {
                       console.warn(`Failed to load image for spot ${spot.id}`);
-                      e.target.src = "https://via.placeholder.com/150";
+                      e.target.src = "https://placehold.co/600x400";
                     }
                   }}
                 />
