@@ -52,46 +52,55 @@ router.get("/", async (req, res) => {
 
 // GET a single spot by ID
 router.get("/:spotId", async (req, res) => {
-  const spotId = parseInt(req.params.spotId, 10);
+  try {
+    const spotId = parseInt(req.params.spotId, 10);
 
-  if (isNaN(spotId)) {
-    return res.status(400).json({
-      title: "Validation error",
-      message: "spotId must be a valid integer",
+    if (isNaN(spotId)) {
+      return res.status(400).json({
+        title: "Validation error",
+        message: "spotId must be a valid integer",
+      });
+    }
+
+    const spot = await Spot.findByPk(spotId, {
+      include: [SpotImage, Review],
     });
+
+    if (!spot) {
+      return res.status(404).json({ message: "Spot couldn't be found" });
+    }
+
+    const data = spot.get({ plain: true });
+    console.log("Raw spot data:", data); // Debug log
+
+    const avgRating =
+      data.Reviews.length > 0
+        ? data.Reviews.reduce((sum, r) => sum + r.stars, 0) /
+          data.Reviews.length
+        : null;
+
+    const formattedSpot = {
+      id: data.id,
+      ownerId: data.ownerId,
+      name: data.name,
+      description: data.description,
+      city: data.city,
+      state: data.state,
+      country: data.country,
+      lat: data.lat,
+      lng: data.lng,
+      price: data.price,
+      avgRating,
+      SpotImages: data.SpotImages || [], // Ensure SpotImages is never null
+      Reviews: data.Reviews || [], // Ensure Reviews is never null
+    };
+
+    console.log("Formatted spot data:", formattedSpot); // Debug log
+    res.status(200).json(formattedSpot);
+  } catch (error) {
+    console.error("Error fetching spot:", error);
+    res.status(500).json({ message: "Server error" });
   }
-
-  const spot = await Spot.findByPk(spotId, {
-    include: [SpotImage, Review],
-  });
-
-  if (!spot) {
-    return res.status(404).json({ message: "Spot couldn't be found" });
-  }
-
-  const data = spot.get({ plain: true });
-  const avgRating =
-    data.Reviews.length > 0
-      ? data.Reviews.reduce((sum, r) => sum + r.stars, 0) / data.Reviews.length
-      : null;
-
-  const formattedSpot = {
-    id: data.id,
-    ownerId: data.ownerId,
-    name: data.name,
-    description: data.description,
-    city: data.city,
-    state: data.state,
-    country: data.country,
-    lat: data.lat,
-    lng: data.lng,
-    price: data.price,
-    avgRating,
-    SpotImages: data.SpotImages,
-    Reviews: data.Reviews,
-  };
-
-  res.status(200).json(formattedSpot);
 });
 
 // POST create a new spot

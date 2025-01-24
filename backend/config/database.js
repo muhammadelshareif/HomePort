@@ -8,6 +8,7 @@ module.exports = {
     host: "127.0.0.1",
     dialect: "postgres",
     seederStorage: "sequelize",
+    seederStoragePath: "db/seeders",
     logQueryParameters: true,
     typeValidation: true,
     schema: "lodging_schema",
