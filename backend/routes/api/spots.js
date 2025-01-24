@@ -51,6 +51,45 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.get("/current", requireAuth, async (req, res) => {
+  console.log(req.user);
+  const spots = await Spot.findAll({
+    where: {
+      ownerId: req.user.id,
+    },
+    include: [SpotImage, Review],
+  });
+
+  const formattedSpots = spots.map((spot) => {
+    const data = spot.get({ plain: true });
+    const avgRating =
+      data.Reviews.length > 0
+        ? data.Reviews.reduce((sum, r) => sum + r.stars, 0) /
+          data.Reviews.length
+        : null;
+
+    const previewImage =
+      data.SpotImages.find((img) => img.preview)?.url || null;
+
+    return {
+      id: data.id,
+      ownerId: data.ownerId,
+      name: data.name,
+      description: data.description,
+      city: data.city,
+      state: data.state,
+      country: data.country,
+      lat: data.lat,
+      lng: data.lng,
+      price: data.price,
+      avgRating,
+      previewImage,
+    };
+  });
+
+  res.status(200).json({ Spots: formattedSpots });
+});
+
 // GET a single spot by ID
 router.get("/:spotId", async (req, res) => {
   try {
@@ -192,6 +231,67 @@ router.post("/:spotId/images", requireAuth, async (req, res) => {
     });
   } catch (error) {
     console.error("Error adding spot image:", error);
+    res.status(500).json({
+      message: "Internal server error",
+      error: error.message,
+    });
+  }
+});
+
+//Delete a spot
+
+router.delete("/:spotId", requireAuth, async (req, res) => {
+  const spotId = parseInt(req.params.spotId, 10);
+
+  try {
+    const spot = await Spot.findByPk(spotId);
+
+    if (!spot) {
+      return res.status(404).json({ message: "Spot couldn't be found" });
+    }
+
+    if (spot.ownerId !== req.user.id) {
+      return res.status(403).json({ message: "Forbidden" });
+    }
+
+    await spot.destroy();
+    res.status(200).json({ message: "Successfully deleted" });
+  } catch (error) {
+    console.error("Error deleting spot:", error);
+    res.status(500).json({
+      message: "Internal server error",
+      error: error.message,
+    });
+  }
+});
+
+router.put("/:spotId", requireAuth, async (req, res) => {
+  const spotId = parseInt(req.params.spotId, 10);
+  const { name, address, city, state, country, description, price } = req.body;
+
+  try {
+    const spot = await Spot.findByPk(spotId);
+
+    if (!spot) {
+      return res.status(404).json({ message: "Spot couldn't be found" });
+    }
+
+    if (spot.ownerId !== req.user.id) {
+      return res.status(403).json({ message: "Forbidden" });
+    }
+
+    spot.name = name;
+    spot.address = address;
+    spot.city = city;
+    spot.state = state;
+    spot.country = country;
+    spot.description = description;
+    spot.price = price;
+
+    await spot.save();
+    res.status(200).json(spot);
+  } catch (error) {
+    console.error("Error updating spot:", error);
     res.status(500).json({
       message: "Internal server error",
       error: error.message,
