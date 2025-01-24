@@ -6,30 +6,32 @@ const CREATE_REVIEW = "reviews/CREATE_REVIEW";
 const DELETE_REVIEW = "reviews/DELETE_REVIEW";
 
 // Action Creators
-export const createReview = (spotId, reviewData) => async (dispatch) => {
-  try {
-    const response = await csrfFetch(`/api/spots/${spotId}/reviews`, {
-      method: "POST",
-      body: JSON.stringify(reviewData),
-    });
-
-    if (response.ok) {
-      const review = await response.json();
-      dispatch({
-        type: CREATE_REVIEW,
-        review,
+export const createReview =
+  ({ spotId, review, stars }) =>
+  async (dispatch) => {
+    try {
+      const response = await csrfFetch(`/api/spots/${spotId}/reviews`, {
+        method: "POST",
+        body: JSON.stringify({ review, stars }),
       });
-      return review;
-    } else {
-      const errors = await response.json();
-      return { errors };
+
+      if (response.ok) {
+        const review = await response.json();
+        dispatch({
+          type: CREATE_REVIEW,
+          review,
+        });
+        return review;
+      } else {
+        const errors = await response.json();
+        return { errors };
+      }
+    } catch (error) {
+      return {
+        errors: { message: "An error occurred while creating the review" },
+      };
     }
-  } catch (error) {
-    return {
-      errors: { message: "An error occurred while creating the review" },
-    };
-  }
-};
+  };
 
 export const deleteReview = (reviewId) => async (dispatch) => {
   try {
