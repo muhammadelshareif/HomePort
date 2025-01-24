@@ -33,11 +33,10 @@ function SpotDetails() {
 
   if (!spot) return <div>Loading...</div>;
 
-  const primaryImage = spot.SpotImages?.find((img) => img.preview)?.url;
-  const secondaryImages = spot.SpotImages?.filter((img) => !img.preview).slice(
-    0,
-    4
-  );
+  const primaryImage =
+    spot?.SpotImages?.find((img) => img.preview)?.url || DEFAULT_IMAGE;
+  const secondaryImages =
+    spot?.SpotImages?.filter((img) => !img.preview)?.slice(0, 4) || [];
 
   const avgRating = spot.avgStarRating;
   const numReviews = spot.numReviews;
