@@ -2,14 +2,14 @@
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
-  margin-top: 80px; /* Push container down */
+  margin-top: 80px;
 }
 
 .spot-form-container h1 {
   font-size: 24px;
   margin-bottom: 20px;
-  margin-top: 50px; /* Add space above title */
-  padding-top: 20px; /* Additional padding for title */
+  margin-top: 50px;
+  padding-top: 20px;
 }
 
 form section {

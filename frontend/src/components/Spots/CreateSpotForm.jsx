@@ -89,7 +89,6 @@ function CreateSpotForm() {
     }));
   };
 
-  // Rest of your JSX remains exactly the same
   return (
     <div className="spot-form-container">
       <h1>Create a New Spot</h1>

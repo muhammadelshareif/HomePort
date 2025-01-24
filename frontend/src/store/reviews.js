@@ -1,4 +1,3 @@
-// store/reviews.js
 import { csrfFetch } from "./csrf";
 
 // Action Types
