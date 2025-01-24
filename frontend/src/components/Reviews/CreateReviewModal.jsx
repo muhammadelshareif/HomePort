@@ -46,6 +46,7 @@ function CreateReviewModal({ spotId }) {
         })
       );
       closeModal();
+      window.location.reload();
     } catch (res) {
       const data = await res.json();
       if (data && data.errors) {

@@ -20,11 +20,6 @@ function SpotDetails() {
     dispatch(fetchSpotDetails(spotId));
   }, [dispatch, spotId]);
 
-  useEffect(() => {
-    console.log("spot:", spot);
-    console.log("SpotImages:", spot.SpotImages);
-  }, [spot]);
-
   const handleDeleteReview = (reviewId) => {
     dispatch(deleteReview(reviewId)).then(() =>
       dispatch(fetchSpotDetails(spotId))
@@ -34,7 +29,7 @@ function SpotDetails() {
   if (!spot) return <div>Loading...</div>;
 
   const primaryImage =
-    spot?.SpotImages?.find((img) => img.preview)?.url || DEFAULT_IMAGE;
+    spot.SpotImages[spot.SpotImages?.length - 1].url || DEFAULT_IMAGE;
   const secondaryImages =
     spot?.SpotImages?.filter((img) => !img.preview)?.slice(0, 4) || [];
 
@@ -54,9 +49,12 @@ function SpotDetails() {
 
   const canPostReview = () => {
     if (!sessionUser) return false;
-    if (spot.ownerId === sessionUser.id) return false;
-    return !sortedReviews.some((review) => review.userId === sessionUser.id);
+    // if (spot.ownerId === sessionUser.id) return false;
+    // return !!sortedReviews.some((review) => review.userId === sessionUser.id);
+    return true;
   };
+
+  console.log(sortedReviews);
 
   return (
     <div className="spot-details-container">
@@ -134,7 +132,7 @@ function SpotDetails() {
           <div className="review-list">
             {sortedReviews.map((review) => (
               <div key={review.id} className="review-item">
-                <p className="review-author">{review.User.firstName}</p>
+                {/* <p className="review-author">{review.User.firstName}</p> */}
                 <p className="review-date">
                   {new Date(review.createdAt).toLocaleDateString("en-US", {
                     month: "long",

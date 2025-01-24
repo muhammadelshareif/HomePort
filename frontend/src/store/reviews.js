@@ -9,9 +9,9 @@ export const createReview =
   ({ spotId, review, stars }) =>
   async (dispatch) => {
     try {
-      const response = await csrfFetch(`/api/spots/${spotId}/reviews`, {
+      const response = await csrfFetch(`/api/reviews`, {
         method: "POST",
-        body: JSON.stringify({ review, stars }),
+        body: JSON.stringify({ spotId, review, stars }),
       });
 
       if (response.ok) {
