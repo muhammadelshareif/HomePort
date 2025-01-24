@@ -13,9 +13,19 @@ const {
 } = require("../../db/models");
 const router = express.Router();
 
-// Create a Review for a Spot
+const validateReview = [
+  check("review")
+    .exists({ checkFalsy: true })
+    .withMessage("Review text is required"),
+  check("stars")
+    .exists({ checkFalsy: true })
+    .isInt({ min: 1, max: 5 })
+    .withMessage("Stars must be an integer from 1 to 5"),
+  handleValidationErrors,
+];
+
 router.post(
-  "/:spotId/reviews",
+  "/spots/:spotId/reviews",
   requireAuth,
   validateReview,
   async (req, res) => {
@@ -23,14 +33,12 @@ router.post(
     const userId = req.user.id;
     const { review, stars } = req.body;
 
-    // Check if spot exists
     const spot = await Spot.findByPk(spotId);
     if (!spot) {
       res.status(404);
       return res.json({ message: "Spot couldn't be found" });
     }
 
-    // Check if user already has a review for this spot
     const existingReview = await Review.findOne({
       where: { spotId, userId },
     });
@@ -50,7 +58,6 @@ router.post(
   }
 );
 
-//Get all Reviews of the Current User
 router.get("/current", requireAuth, async (req, res) => {
   const reviews = await Review.findAll({
     where: {
@@ -86,18 +93,6 @@ router.get("/current", requireAuth, async (req, res) => {
   res.json({ Reviews: reviews });
 });
 
-const validateReview = [
-  check("review")
-    .exists({ checkFalsy: true })
-    .withMessage("Review text is required"),
-  check("stars")
-    .exists({ checkFalsy: true })
-    .isInt({ min: 1, max: 5 })
-    .withMessage("Stars must be an integer from 1 to 5"),
-  handleValidationErrors,
-];
-
-//Update and return an existing review.
 router.put("/:reviewId", requireAuth, validateReview, async (req, res) => {
   const { review, stars } = req.body;
   const reviewId = req.params.reviewId;
