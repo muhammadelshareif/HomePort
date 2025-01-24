@@ -2,7 +2,7 @@
 
 let options = {};
 if (process.env.NODE_ENV === "production") {
-  options.schema = "lodging_schema"; // Explicitly set to lodging_schema for development
+  options.schema = "lodging_schema";
 }
 
 module.exports = {

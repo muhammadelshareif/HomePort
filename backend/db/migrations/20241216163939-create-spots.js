@@ -19,7 +19,7 @@ module.exports = {
         ownerId: {
           type: Sequelize.INTEGER,
           allowNull: false,
-          references: { model: "Users" }, // Ensure this matches your Users table
+          references: { model: "Users" },
           onDelete: "CASCADE",
         },
         address: {

@@ -23,7 +23,7 @@ module.exports = {
         require: true,
         rejectUnauthorized: false,
       },
-      // Add schema to search path
+
       searchPath: ["lodging_schema"],
     },
     pool: {
