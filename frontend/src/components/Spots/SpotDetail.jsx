@@ -2,11 +2,13 @@ import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchSpotDetails } from "../../store/spots";
-import { deleteReview } from "../../store/reviews"; // Added import for deleteReview
+import { deleteReview } from "../../store/reviews";
 import OpenModalButton from "../../components/OpenModalButton";
 import CreateReviewModal from "../Reviews/CreateReviewModal";
 import DeleteReviewModal from "../Reviews/DeleteReviewModal";
 import "./SpotDetail.css";
+
+const DEFAULT_IMAGE = "https://placehold.co/600x400";
 
 function SpotDetails() {
   const { spotId } = useParams();
@@ -18,10 +20,15 @@ function SpotDetails() {
     dispatch(fetchSpotDetails(spotId));
   }, [dispatch, spotId]);
 
+  useEffect(() => {
+    console.log("spot:", spot);
+    console.log("SpotImages:", spot.SpotImages);
+  }, [spot]);
+
   const handleDeleteReview = (reviewId) => {
     dispatch(deleteReview(reviewId)).then(() =>
       dispatch(fetchSpotDetails(spotId))
-    ); // Refetch spot details after deletion
+    );
   };
 
   if (!spot) return <div>Loading...</div>;
@@ -66,13 +73,22 @@ function SpotDetails() {
       <div className="spot-images-container">
         {primaryImage && (
           <div className="primary-image">
-            <img src={primaryImage} alt={`${spot.name} primary view`} />
+            <img
+              src={primaryImage || DEFAULT_IMAGE}
+              alt={`${spot.name} primary view`}
+              onError={(e) => (e.target.src = DEFAULT_IMAGE)}
+            />
           </div>
         )}
         {secondaryImages && (
           <div className="secondary-images">
             {secondaryImages.map((img) => (
-              <img key={img.id} src={img.url} alt={`${spot.name} view`} />
+              <img
+                key={img.id}
+                src={img.url || DEFAULT_IMAGE}
+                alt={`${spot.name} view`}
+                onError={(e) => (e.target.src = DEFAULT_IMAGE)}
+              />
             ))}
           </div>
         )}
