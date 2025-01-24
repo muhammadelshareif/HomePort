@@ -12,6 +12,7 @@ module.exports = {
           city: "Aspen",
           state: "Colorado",
           country: "United States",
+
           lat: 39.1911,
           lng: -106.8175,
           description: "A charming cabin nestled in the mountains",
@@ -26,6 +27,7 @@ module.exports = {
           city: "Santa Cruz",
           state: "California",
           country: "United States",
+
           lat: 36.9741,
           lng: -122.0307,
           description: "Relaxing beach house with ocean views",

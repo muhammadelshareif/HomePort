@@ -10,7 +10,7 @@ router.get("/", async (req, res) => {
     const spots = await Spot.findAll({
       include: [SpotImage, Review],
     });
-
+    console.log(spots);
     console.log("Total spots found:", spots.length);
 
     const formattedSpots = spots.map((spot) => {
@@ -24,6 +24,7 @@ router.get("/", async (req, res) => {
       const previewImage =
         data.SpotImages.find((img) => img.preview)?.url || null;
 
+      // console.log(data);
       return {
         id: data.id,
         ownerId: data.ownerId,
