@@ -24,29 +24,25 @@ const validateReview = [
   handleValidationErrors,
 ];
 
-router.post(
-  "/spots/:spotId/reviews",
-  requireAuth,
-  validateReview,
-  async (req, res) => {
-    const spotId = req.params.spotId;
-    const userId = req.user.id;
-    const { review, stars } = req.body;
+router.post("/", requireAuth, validateReview, async (req, res) => {
+  const userId = req.user.id;
+  const { review, stars, spotId } = req.body;
 
-    const spot = await Spot.findByPk(spotId);
-    if (!spot) {
-      res.status(404);
-      return res.json({ message: "Spot couldn't be found" });
-    }
+  const spot = await Spot.findByPk(spotId);
+  if (!spot) {
+    console.log("Spot not found");
+    res.status(404);
+    return res.json({ message: "Spot couldn't be found" });
+  }
 
-    const existingReview = await Review.findOne({
-      where: { spotId, userId },
-    });
-    if (existingReview) {
-      res.status(403);
-      return res.json({ message: "User already has a review for this spot" });
-    }
-
+  const existingReview = await Review.findOne({
+    where: { spotId, userId },
+  });
+  if (existingReview) {
+    res.status(403);
+    return res.json({ message: "User already has a review for this spot" });
+  }
+  try {
     const newReview = await Review.create({
       userId,
       spotId,
@@ -54,9 +50,23 @@ router.post(
       stars,
     });
 
-    res.status(201).json(newReview);
+    return res.status(201).json(newReview);
+  } catch (error) {
+    console.error("Create review error:", error);
+    res.status(500).json({
+      message: "Internal server error",
+      error: error.message,
+    });
   }
-);
+  // const newReview = await Review.create({
+  //   userId,
+  //   spotId,
+  //   review,
+  //   stars,
+  // });
+
+  // res.status(201).json(newReview);
+});
 
 router.get("/current", requireAuth, async (req, res) => {
   const reviews = await Review.findAll({
@@ -116,4 +126,23 @@ router.put("/:reviewId", requireAuth, validateReview, async (req, res) => {
   res.json(reviewToUpdate);
 });
 
+router.delete("/:reviewId", requireAuth, async (req, res) => {
+  const reviewId = req.params.reviewId;
+
+  const reviewToDelete = await Review.findByPk(reviewId);
+
+  if (!reviewToDelete) {
+    res.status(404);
+    return res.json({ message: "Review couldn't be found" });
+  }
+
+  if (reviewToDelete.userId !== req.user.id) {
+    res.status(403);
+    return res.json({ message: "Forbidden" });
+  }
+
+  await reviewToDelete.destroy();
+
+  res.json({ message: "Review deleted" });
+});
 module.exports = router;
