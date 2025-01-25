@@ -219,6 +219,12 @@ const spotsReducer = (state = initialState, action) => {
         isLoading: false,
       };
     }
+    case DELETE_SPOT: {
+      const newState = { ...state };
+      delete newState.userSpots[action.payload];
+      delete newState.allSpots[action.payload];
+      return newState;
+    }
     default:
       return state;
   }

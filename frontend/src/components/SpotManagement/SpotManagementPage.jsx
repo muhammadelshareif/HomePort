@@ -20,9 +20,13 @@ function SpotManagementPage() {
 
   const handleDelete = async () => {
     if (selectedSpotId) {
-      await dispatch(deleteSpot(selectedSpotId));
-      dispatch(fetchUserSpots()); // Refresh user spots after deletion
-      closeModal(); // Close the modal after deletion
+      try {
+        await dispatch(deleteSpot(selectedSpotId));
+        await dispatch(fetchUserSpots());
+        closeModal();
+      } catch (error) {
+        console.error("Error deleting spot:", error);
+      }
     }
   };
 

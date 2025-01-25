@@ -1,8 +1,9 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { fetchUserSpots, deleteSpot } from "../../store/spots";
+import { fetchUserSpots } from "../../store/spots";
 import SpotTile from "../Spots/SpotTile";
 import { useEffect, useState } from "react";
+import { deleteExistingSpot } from "../../store/spots";
 import "./ManageSpots.css";
 
 function ManageSpots() {
@@ -17,14 +18,13 @@ function ManageSpots() {
     dispatch(fetchUserSpots());
   }, [dispatch]);
 
-  const handleDelete = (spotId) => {
-    dispatch(deleteSpot(spotId))
-      .then(() => {
-        setShowDeleteModal(null);
-      })
-      .catch((error) => {
-        console.error("Delete failed", error);
-      });
+  const handleDelete = async (spotId) => {
+    try {
+      await dispatch(deleteExistingSpot(spotId));
+      setShowDeleteModal(null);
+    } catch (error) {
+      console.error("Delete failed", error);
+    }
   };
 
   if (!userSpots.length) {
