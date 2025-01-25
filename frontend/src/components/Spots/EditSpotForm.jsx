@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { fetchSpotDetails, updateSpot } from "../../store/spots";
+import { fetchSpotDetails } from "../../store/spots";
+import { updateExistingSpot } from "../../store/spots";
 import "./SpotForm.css";
 
 function EditSpotForm() {
@@ -90,12 +91,7 @@ function EditSpotForm() {
     }
 
     try {
-      const updatedSpot = await dispatch(
-        updateSpot({
-          id: spotId,
-          ...formData,
-        })
-      );
+      const updatedSpot = await dispatch(updateExistingSpot(spotId, formData));
       navigate(`/spots/${updatedSpot.id}`);
     } catch (error) {
       setErrors(error.errors || { form: "Failed to update spot" });

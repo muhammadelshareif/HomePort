@@ -8,6 +8,7 @@ const DELETE_SPOT = "spots/DELETE_SPOT";
 const LOAD_USER_SPOTS = "spots/LOAD_USER_SPOTS";
 const SET_LOADING = "spots/SET_LOADING";
 
+// Action creators
 export const loadSpots = (spots) => ({
   type: LOAD_SPOTS,
   payload: spots,
@@ -38,6 +39,7 @@ export const setLoading = (isLoading) => ({
   payload: isLoading,
 });
 
+// Thunks
 export const fetchSpots = () => async (dispatch) => {
   dispatch(setLoading(true));
   try {
@@ -156,7 +158,6 @@ export const fetchUserSpots = () => async (dispatch) => {
   }
 };
 
-// Initial State
 const initialState = {
   allSpots: {},
   currentSpot: null,
@@ -224,6 +225,20 @@ const spotsReducer = (state = initialState, action) => {
       delete newState.userSpots[action.payload];
       delete newState.allSpots[action.payload];
       return newState;
+    }
+    case UPDATE_SPOT: {
+      return {
+        ...state,
+        allSpots: {
+          ...state.allSpots,
+          [action.payload.id]: action.payload,
+        },
+        currentSpot: action.payload,
+        userSpots: {
+          ...state.userSpots,
+          [action.payload.id]: action.payload,
+        },
+      };
     }
     default:
       return state;

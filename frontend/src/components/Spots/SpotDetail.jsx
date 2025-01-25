@@ -29,7 +29,9 @@ function SpotDetails() {
   if (!spot) return <div>Loading...</div>;
 
   const primaryImage =
-    spot.SpotImages[spot.SpotImages?.length - 1].url || DEFAULT_IMAGE;
+    spot.SpotImages?.find((img) => img.preview)?.url || DEFAULT_IMAGE;
+
+  // const primaryImage = spot.SpotImages[spot.SpotImages?.length - 1].url || DEFAULT_IMAGE;
   const secondaryImages =
     spot?.SpotImages?.filter((img) => !img.preview)?.slice(0, 4) || [];
 
